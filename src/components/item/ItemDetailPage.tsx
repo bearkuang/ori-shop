@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 interface Item {
@@ -43,6 +43,11 @@ const ItemDetailPage: React.FC = () => {
     const { itemId } = useParams<{ itemId: string }>();
     const [item, setItem] = useState<Item | null>(null);
     const [loading, setLoading] = useState(true);
+    const [isMenuBarOpen, setIsMenuBarOpen] = useState(false);
+    const [selectedColor, setSelectedColor] = useState('');
+    const [selectedSize, setSelectedSize] = useState('');
+    const [quantity, setQuantity] = useState(1);
+    const navigate = useNavigate();
 
     const fetchItemDetails = async (id: number): Promise<Item> => {
         try {
@@ -89,6 +94,65 @@ const ItemDetailPage: React.FC = () => {
     if (!item) {
         return <div>Item not found</div>;
     }
+
+    const handleGoToMain = () => {
+        navigate("/");
+    }
+
+    const handleBuyClick = () => {
+        setIsMenuBarOpen(true);
+    };
+
+    const increaseQuantity = () => {
+        setQuantity(prevQuantity => prevQuantity + 1);
+    };
+
+    const decreaseQuantity = () => {
+        setQuantity(prevQuantity => (prevQuantity > 1 ? prevQuantity - 1 : 1));
+    };
+
+    const handleAddToCart = async () => {
+        if (selectedColor && selectedSize && item) {
+            try {
+                await axios.post('http://localhost:8000/api/items/add_to_cart/', {
+                    quantity,
+                    option: {
+                        item_no: item.id,
+                        opt_color: selectedColor,
+                        opt_size: selectedSize
+                    }
+                });
+                alert('장바구니에 담겼습니다.');
+            } catch (error) {
+                console.error('Error adding to cart:', error);
+                alert('장바구니에 담는 중 오류가 발생했습니다.');
+            }
+        } else {
+            alert('색상과 사이즈를 선택해주세요.');
+        }
+    };
+
+    const handleOrderDirect = async () => {
+        if (selectedColor && selectedSize && item) {
+            try {
+                await axios.post('http://localhost:8000/api/orders/order_direct/', {
+                    item_id: item.id,
+                    option_id: selectedOption?.id,
+                    quantity,
+                    order_total_price: item.item_price * quantity
+                });
+                alert('구매가 완료되었습니다.');
+            } catch (error) {
+                console.error('Error placing order:', error);
+                alert('구매 중 오류가 발생했습니다.');
+            }
+        } else {
+            alert('색상과 사이즈를 선택해주세요.');
+        }
+    };
+
+    const selectedOption = item.options.find(option => option.opt_color === selectedColor && option.opt_size === selectedSize);
+
     return (
         <div className='main-container flex w-[1280px] flex-col items-start flex-nowrap bg-[#fff] relative mx-auto my-0'>
             <div className='flex pt-[12px] pr-[40px] pb-[12px] pl-[40px] justify-between items-center self-stretch shrink-0 flex-nowrap border-solid border-t border-t-[#e5e8ea] relative'>
@@ -96,7 +160,7 @@ const ItemDetailPage: React.FC = () => {
                     <div className='flex w-[16px] flex-col items-start shrink-0 flex-nowrap relative z-[2]'>
                         <div className='w-[16px] grow shrink-0 basis-0 bg-cover bg-no-repeat relative overflow-hidden z-[3]' />
                     </div>
-                    <div className='flex w-[40px] flex-col items-start shrink-0 flex-nowrap relative z-[4]'>
+                    <div className='flex w-[40px] flex-col items-start shrink-0 flex-nowrap relative z-[4] cursor-pointer' onClick={handleGoToMain}>
                         <span className="h-[23px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[18px] font-bold leading-[23px] text-[#161111] relative text-left whitespace-nowrap z-[5]">
                             D'ori
                         </span>
@@ -117,20 +181,12 @@ const ItemDetailPage: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                    <div className='flex w-[88px] gap-[8px] items-start shrink-0 flex-nowrap relative z-[14]'>
-                        <div className='flex w-[40px] h-[40px] pt-0 pr-[10px] pb-0 pl-[10px] gap-[8px] justify-center items-center shrink-0 flex-nowrap bg-[#f4f2ef] rounded-[20px] relative overflow-hidden z-[15]'>
-                            <div className='flex flex-col items-center grow shrink-0 basis-0 flex-nowrap relative z-[16]'>
-                                <div className='self-stretch grow shrink-0 basis-0 relative overflow-hidden z-[17]'>
-                                    <div className='w-[20px] h-[20px] bg-cover bg-no-repeat absolute top-0 left-0 z-[18]' />
-                                </div>
-                            </div>
+                    <div className='flex w-[88px] gap-[12px] items-start shrink-0 flex-nowrap relative z-[14]'>
+                        <div className='flex flex-col items-center grow shrink-0 basis-0 flex-nowrap relative z-20'>
+                            <img src="https://i.ibb.co/VQM6YLp/smart-cart.png" alt="Profile Edit" className="w-[40px] h-[40px] rounded-full" />
                         </div>
-                        <div className='flex w-[40px] h-[40px] pt-0 pr-[10px] pb-0 pl-[10px] gap-[8px] justify-center items-center shrink-0 flex-nowrap bg-[#f4f2ef] rounded-[20px] relative overflow-hidden z-[19]'>
-                            <div className='flex flex-col items-center grow shrink-0 basis-0 flex-nowrap relative z-20'>
-                                <div className='self-stretch grow shrink-0 basis-0 relative overflow-hidden z-[21]'>
-                                    <div className='w-[20px] h-[20px] bg-cover bg-no-repeat absolute top-0 left-0 z-[22]' />
-                                </div>
-                            </div>
+                        <div className='flex flex-col items-center grow shrink-0 basis-0 flex-nowrap relative z-20'>
+                            <img src="https://i.ibb.co/tB6CY38/user-icon.png" alt="Profile Edit" className="w-[40px] h-[40px] rounded-full" />
                         </div>
                     </div>
                 </div>
@@ -254,14 +310,15 @@ const ItemDetailPage: React.FC = () => {
                                     {item.item_price} 원
                                 </span>
                             </div>
-                            <div className='flex pt-[12px] pr-[16px] pb-[12px] pl-[16px] gap-[5px] justify-center items-center self-stretch shrink-0 flex-nowrap relative z-[41]'>
-                                <div className='flex h-[40px] pt-0 pr-[16px] pb-0 pl-[16px] justify-center items-center grow shrink-0 basis-0 flex-nowrap bg-[#f45442] rounded-[12px] relative overflow-hidden z-[42]'>
-                                    <div className='flex w-[78px] flex-col items-center shrink-0 flex-nowrap relative overflow-hidden z-[43]'>
-                                        <span className="h-[21px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[14px] font-bold leading-[21px] text-[#fcf7f7] relative text-center overflow-hidden whitespace-nowrap z-[44]">
-                                            구매하기
-                                        </span>
-                                    </div>
-                                </div>
+                            <div className='flex pt-[12px] pr-[16px] pb-[12px] pl-[16px] gap-[5px] justify-center items-center self-stretch shrink-0 flex-nowrap relative z-[81]'>
+                                <button
+                                    onClick={handleBuyClick}
+                                    className='flex h-[40px] pt-0 pr-[16px] pb-0 pl-[16px] justify-center items-center grow shrink-0 basis-0 flex-nowrap bg-[#f45442] rounded-[12px] relative overflow-hidden z-[42]'
+                                >
+                                    <span className="h-[21px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[14px] font-bold leading-[21px] text-[#fcf7f7] relative text-center overflow-hidden whitespace-nowrap z-[44]">
+                                        구매하기
+                                    </span>
+                                </button>
                             </div>
                             <div className='flex pt-[8px] pr-[16px] pb-[8px] pl-[16px] gap-[16px] items-start self-stretch shrink-0 flex-wrap relative z-[45]'>
                                 <div className='flex w-[82px] pt-[8px] pr-[12px] pb-[8px] pl-[12px] gap-[8px] justify-center items-center flex-nowrap relative z-[46]'>
@@ -402,6 +459,57 @@ const ItemDetailPage: React.FC = () => {
                     </div>
                 </div>
             </div>
+            {isMenuBarOpen && (
+                <div className="fixed bottom-0 left-0 right-0 bg-white shadow-lg p-6 z-50 max-w-[1280px] mx-auto">
+                    <div className="flex flex-col space-y-6">
+                        <select
+                            value={selectedColor}
+                            onChange={(e) => setSelectedColor(e.target.value)}
+                            className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
+                        >
+                            <option value="">Select Color</option>
+                            {item.options.map(option => (
+                                <option key={option.id} value={option.opt_color}>{option.opt_color}</option>
+                            ))}
+                        </select>
+                        <select
+                            value={selectedSize}
+                            onChange={(e) => setSelectedSize(e.target.value)}
+                            className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
+                        >
+                            <option value="">Select Size</option>
+                            {item.options.map(option => (
+                                <option key={option.id} value={option.opt_size}>{option.opt_size}</option>
+                            ))}
+                        </select>
+                        {selectedOption && (
+                            <div className="bg-gray-100 p-2 rounded-lg">
+                                <div className="flex flex-col space-y-4">
+                                    <div className="flex justify-between items-center bg-white p-2 rounded-lg">
+                                        <span className="text-lg font-semibold">{`${selectedOption.opt_color}, ${selectedOption.opt_size} - ${quantity} 개 - ${item.item_price * quantity} 원`}</span>
+                                        <div className="flex items-center space-x-2">
+                                            <button onClick={decreaseQuantity} className="px-3 py-1 bg-gray-200 rounded-lg hover:bg-gray-300">-</button>
+                                            <span className="text-lg">{quantity}</span>
+                                            <button onClick={increaseQuantity} className="px-3 py-1 bg-gray-200 rounded-lg hover:bg-gray-300">+</button>
+                                            <span className="text-lg font-semibold">{`${item.item_price * quantity} 원`}</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex justify-between items-center">
+                                        <span className="text-lg font-semibold">{`상품 ${quantity} 개`}</span>
+                                        <div className="flex items-center text-lg font-semibold space-x-2">
+                                            {`${item.item_price * quantity} 원`}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                        <div className="flex justify-between">
+                            <button onClick={handleAddToCart} className="bg-gray-200 text-black px-4 py-2 rounded-lg hover:bg-gray-300">장바구니</button>
+                            <button onClick={handleOrderDirect} className="bg-[#f45442] text-white px-4 py-2 rounded-lg hover:bg-[#e34331]">구매하기</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

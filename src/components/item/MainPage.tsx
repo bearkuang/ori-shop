@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface Item {
   id: number;
@@ -18,6 +18,7 @@ interface Item {
 const MainPage: React.FC = () => {
   const [popularItems, setPopularItems] = useState<Item[]>([]);
   const [newItems, setNewItems] = useState<Item[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPopularItems = async () => {
@@ -42,50 +43,46 @@ const MainPage: React.FC = () => {
     fetchNewItems();
   }, []);
 
+  const handleGoToMain = () => {
+    navigate("/");
+}
+
   return (
     <div className="main-container flex w-[1280px] flex-col items-start flex-nowrap bg-[#fff] relative mx-auto my-0">
       <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap bg-[#fff] relative overflow-hidden">
         <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[1]">
-          <div className="flex pt-[12px] pr-[40px] pb-[12px] pl-[40px] justify-between items-center self-stretch shrink-0 flex-nowrap border-solid border-t border-t-[#e5e8ea] relative z-[2]">
-            <div className="flex w-[72px] gap-[16px] items-center shrink-0 flex-nowrap relative z-[3]">
-              <div className="flex w-[16px] flex-col items-start shrink-0 flex-nowrap relative z-[4]">
-                <div className="w-[16px] grow shrink-0 basis-0 bg-cover bg-no-repeat relative overflow-hidden z-[5]" />
+          <div className='flex pt-[12px] pr-[40px] pb-[12px] pl-[40px] justify-between items-center self-stretch shrink-0 flex-nowrap border-solid border-t border-t-[#e5e8ea] relative'>
+            <div className='flex w-[72px] gap-[16px] items-center shrink-0 flex-nowrap relative z-[1]'>
+              <div className='flex w-[16px] flex-col items-start shrink-0 flex-nowrap relative z-[2]'>
+                <div className='w-[16px] grow shrink-0 basis-0 bg-cover bg-no-repeat relative overflow-hidden z-[3]' />
               </div>
-              <div className="flex w-[40px] flex-col items-start shrink-0 flex-nowrap relative z-[6]">
-                <span className="h-[23px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[18px] font-bold leading-[23px] text-[#161111] relative text-left whitespace-nowrap z-[7]">
+              <div className='flex w-[40px] flex-col items-start shrink-0 flex-nowrap relative z-[4] cursor-pointer' onClick={handleGoToMain}>
+                <span className="h-[23px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[18px] font-bold leading-[23px] text-[#161111] relative text-left whitespace-nowrap z-[5]">
                   D'ori
                 </span>
               </div>
             </div>
-            <div className="flex gap-[32px] justify-end items-start grow shrink-0 basis-0 flex-nowrap relative z-[8]">
-              <div className="flex w-[160px] flex-col items-start shrink-0 flex-nowrap relative z-[9]">
-                <div className="flex items-start self-stretch grow shrink-0 basis-0 flex-nowrap rounded-[12px] relative z-10">
-                  <div className="flex w-[40px] pt-0 pr-0 pb-0 pl-[16px] justify-center items-center self-stretch shrink-0 flex-nowrap bg-[#f4f2ef] rounded-tl-[12px] rounded-tr-none rounded-br-none rounded-bl-[12px] relative z-[11]">
-                    <div className="h-[24px] grow shrink-0 basis-0 relative overflow-hidden z-[12]">
-                      <div className="w-[24px] h-[24px] bg-cover bg-no-repeat absolute top-0 left-0 z-[13]" />
+            <div className='flex gap-[32px] justify-end items-start grow shrink-0 basis-0 flex-nowrap relative z-[6]'>
+              <div className='flex w-[160px] flex-col items-start shrink-0 flex-nowrap relative z-[7]'>
+                <div className='flex items-start self-stretch grow shrink-0 basis-0 flex-nowrap rounded-[12px] relative z-[8]'>
+                  <div className='flex w-[40px] pt-0 pr-0 pb-0 pl-[16px] justify-center items-center self-stretch shrink-0 flex-nowrap bg-[#f4f2ef] rounded-tl-[12px] rounded-tr-none rounded-br-none rounded-bl-[12px] relative z-[9]'>
+                    <div className='h-[24px] grow shrink-0 basis-0 relative overflow-hidden z-10'>
+                      <div className='w-[24px] h-[24px] bg-cover bg-no-repeat absolute top-0 left-0 z-[11]' />
                     </div>
                   </div>
-                  <div className="flex pt-[8px] pr-[16px] pb-[8px] pl-[8px] items-center self-stretch grow shrink-0 basis-0 flex-nowrap bg-[#f4f2ef] rounded-tl-none rounded-tr-[12px] rounded-br-[12px] rounded-bl-none relative overflow-hidden z-[14]">
-                    <span className="h-[24px] shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#896660] relative text-left whitespace-nowrap z-[15]">
+                  <div className='flex pt-[8px] pr-[16px] pb-[8px] pl-[8px] items-center self-stretch grow shrink-0 basis-0 flex-nowrap bg-[#f4f2ef] rounded-tl-none rounded-tr-[12px] rounded-br-[12px] rounded-bl-none relative overflow-hidden z-[12]'>
+                    <span className="h-[24px] shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#896660] relative text-left whitespace-nowrap z-[13]">
                       Search
                     </span>
                   </div>
                 </div>
               </div>
-              <div className="flex w-[88px] gap-[8px] items-start shrink-0 flex-nowrap relative z-[16]">
-                <div className="flex w-[40px] h-[40px] pt-0 pr-[10px] pb-0 pl-[10px] gap-[8px] justify-center items-center shrink-0 flex-nowrap bg-[#f4f2ef] rounded-[20px] relative overflow-hidden z-[17]">
-                  <div className="flex flex-col items-center grow shrink-0 basis-0 flex-nowrap relative z-[18]">
-                    <div className="self-stretch grow shrink-0 basis-0 relative overflow-hidden z-[19]">
-                      <div className="w-[20px] h-[20px] bg-cover bg-no-repeat absolute top-0 left-0 z-20" />
-                    </div>
-                  </div>
+              <div className='flex w-[88px] gap-[12px] items-start shrink-0 flex-nowrap relative z-[14]'>
+                <div className='flex flex-col items-center grow shrink-0 basis-0 flex-nowrap relative z-20'>
+                  <img src="https://i.ibb.co/VQM6YLp/smart-cart.png" alt="Profile Edit" className="w-[40px] h-[40px] rounded-full" />
                 </div>
-                <div className="flex w-[40px] h-[40px] pt-0 pr-[10px] pb-0 pl-[10px] gap-[8px] justify-center items-center shrink-0 flex-nowrap bg-[#f4f2ef] rounded-[20px] relative overflow-hidden z-[21]">
-                  <div className="flex flex-col items-center grow shrink-0 basis-0 flex-nowrap relative z-[22]">
-                    <div className="self-stretch grow shrink-0 basis-0 relative overflow-hidden z-[23]">
-                      <div className="w-[20px] h-[20px] bg-cover bg-no-repeat absolute top-0 left-0 z-[24]" />
-                    </div>
-                  </div>
+                <div className='flex flex-col items-center grow shrink-0 basis-0 flex-nowrap relative z-20'>
+                  <img src="https://i.ibb.co/tB6CY38/user-icon.png" alt="Profile Edit" className="w-[40px] h-[40px] rounded-full" />
                 </div>
               </div>
             </div>
@@ -126,22 +123,6 @@ const MainPage: React.FC = () => {
                       <span className="h-[60px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[48px] font-bold leading-[60px] text-[#1c0f0c] tracking-[-2px] relative text-center whitespace-nowrap z-[43]">
                         Summer Sale
                       </span>
-                    </div>
-                    <div className="flex w-[400px] gap-[12px] items-start shrink-0 flex-wrap relative z-[44]">
-                      <div className="flex w-[147px] h-[48px] pt-0 pr-[20px] pb-0 pl-[20px] justify-center items-center flex-nowrap bg-[#f45442] rounded-[12px] relative overflow-hidden z-[45]">
-                        <div className="flex w-[107px] flex-col items-center shrink-0 flex-nowrap relative overflow-hidden z-[46]">
-                          <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-bold leading-[24px] text-[#fcf7f7] relative text-center overflow-hidden whitespace-nowrap z-[47]">
-                            Shop Women
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex w-[121px] h-[48px] pt-0 pr-[20px] pb-0 pl-[20px] justify-center items-center flex-nowrap bg-[#f4e8e8] rounded-[12px] relative overflow-hidden z-[48]">
-                        <div className="flex w-[81px] flex-col items-center shrink-0 flex-nowrap relative overflow-hidden z-[49]">
-                          <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-bold leading-[24px] text-[#1c0f0c] relative text-center overflow-hidden whitespace-nowrap z-50">
-                            Shop Men
-                          </span>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
