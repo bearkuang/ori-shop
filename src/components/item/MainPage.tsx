@@ -43,50 +43,10 @@ const MainPage: React.FC = () => {
     fetchNewItems();
   }, []);
 
-  const handleGoToMain = () => {
-    navigate("/");
-}
-
   return (
     <div className="main-container flex w-[1280px] flex-col items-start flex-nowrap bg-[#fff] relative mx-auto my-0">
       <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap bg-[#fff] relative overflow-hidden">
         <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[1]">
-          <div className='flex pt-[12px] pr-[40px] pb-[12px] pl-[40px] justify-between items-center self-stretch shrink-0 flex-nowrap border-solid border-t border-t-[#e5e8ea] relative'>
-            <div className='flex w-[72px] gap-[16px] items-center shrink-0 flex-nowrap relative z-[1]'>
-              <div className='flex w-[16px] flex-col items-start shrink-0 flex-nowrap relative z-[2]'>
-                <div className='w-[16px] grow shrink-0 basis-0 bg-cover bg-no-repeat relative overflow-hidden z-[3]' />
-              </div>
-              <div className='flex w-[40px] flex-col items-start shrink-0 flex-nowrap relative z-[4] cursor-pointer' onClick={handleGoToMain}>
-                <span className="h-[23px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[18px] font-bold leading-[23px] text-[#161111] relative text-left whitespace-nowrap z-[5]">
-                  D'ori
-                </span>
-              </div>
-            </div>
-            <div className='flex gap-[32px] justify-end items-start grow shrink-0 basis-0 flex-nowrap relative z-[6]'>
-              <div className='flex w-[160px] flex-col items-start shrink-0 flex-nowrap relative z-[7]'>
-                <div className='flex items-start self-stretch grow shrink-0 basis-0 flex-nowrap rounded-[12px] relative z-[8]'>
-                  <div className='flex w-[40px] pt-0 pr-0 pb-0 pl-[16px] justify-center items-center self-stretch shrink-0 flex-nowrap bg-[#f4f2ef] rounded-tl-[12px] rounded-tr-none rounded-br-none rounded-bl-[12px] relative z-[9]'>
-                    <div className='h-[24px] grow shrink-0 basis-0 relative overflow-hidden z-10'>
-                      <div className='w-[24px] h-[24px] bg-cover bg-no-repeat absolute top-0 left-0 z-[11]' />
-                    </div>
-                  </div>
-                  <div className='flex pt-[8px] pr-[16px] pb-[8px] pl-[8px] items-center self-stretch grow shrink-0 basis-0 flex-nowrap bg-[#f4f2ef] rounded-tl-none rounded-tr-[12px] rounded-br-[12px] rounded-bl-none relative overflow-hidden z-[12]'>
-                    <span className="h-[24px] shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#896660] relative text-left whitespace-nowrap z-[13]">
-                      Search
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className='flex w-[88px] gap-[12px] items-start shrink-0 flex-nowrap relative z-[14]'>
-                <div className='flex flex-col items-center grow shrink-0 basis-0 flex-nowrap relative z-20'>
-                  <img src="https://i.ibb.co/VQM6YLp/smart-cart.png" alt="Profile Edit" className="w-[40px] h-[40px] rounded-full" />
-                </div>
-                <div className='flex flex-col items-center grow shrink-0 basis-0 flex-nowrap relative z-20'>
-                  <img src="https://i.ibb.co/tB6CY38/user-icon.png" alt="Profile Edit" className="w-[40px] h-[40px] rounded-full" />
-                </div>
-              </div>
-            </div>
-          </div>
           <div className="flex h-[1780px] pt-[20px] pr-[160px] pb-[20px] pl-[160px] justify-center items-start self-stretch shrink-0 flex-nowrap relative z-[25]">
             <div className="flex flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[26]">
               <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[27]">
@@ -117,7 +77,7 @@ const MainPage: React.FC = () => {
               </div>
               <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[38]">
                 <div className="flex w-[960px] h-[359px] pt-[40px] pr-[16px] pb-[40px] pl-[16px] gap-[32px] items-start shrink-0 flex-nowrap relative z-[39]">
-                  <div className="h-[279px] grow shrink-0 basis-0 bg-cover bg-no-repeat rounded-[12px] relative overflow-hidden z-40" style={{ backgroundImage: 'url("https://i.ibb.co/10Mvfky/d-ori-banner.png")' }} />
+                  <div className="h-[279px] grow shrink-0 basis-0 bg-cover bg-no-repeat rounded-[12px] relative overflow-hidden z-40" style={{ backgroundImage: 'url("https://i.ibb.co/G5HcKk2/dori-middle-banner.png")' }} />
                   <div className="flex w-[400px] h-[279px] flex-col gap-[32px] justify-center items-start shrink-0 flex-nowrap relative z-[41]">
                     <div className="flex w-[400px] flex-col items-center shrink-0 flex-nowrap relative z-[42]">
                       <span className="h-[60px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[48px] font-bold leading-[60px] text-[#1c0f0c] tracking-[-2px] relative text-center whitespace-nowrap z-[43]">
@@ -152,7 +112,7 @@ const MainPage: React.FC = () => {
                         </div>
                         <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[60]">
                           <span className="h-[21px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[14px] font-normal leading-[21px] text-[#896660] relative text-left whitespace-nowrap z-[61]">
-                            D'ori • {item.likes} likes
+                            ❤️ {item.likes} likes
                           </span>
                         </div>
                       </div>
@@ -183,65 +143,14 @@ const MainPage: React.FC = () => {
                             ${item.item_price}
                           </span>
                         </div>
-                        <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[92]">
-                          <span className="h-[21px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[14px] font-normal leading-[21px] text-[#896660] relative text-left whitespace-nowrap z-[93]">
-                            D'ori
+                        <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[60]">
+                          <span className="h-[21px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[14px] font-normal leading-[21px] text-[#896660] relative text-left whitespace-nowrap z-[61]">
+                            ❤️ {item.likes} likes
                           </span>
                         </div>
                       </div>
                     </Link>
                   ))}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="flex justify-center items-start self-stretch shrink-0 flex-nowrap relative z-[115]">
-            <div className="flex flex-col items-start grow shrink-0 basis-0 flex-nowrap relative z-[116]">
-              <div className="flex pt-[40px] pr-[20px] pb-[40px] pl-[20px] flex-col gap-[24px] items-start self-stretch grow shrink-0 basis-0 flex-nowrap relative z-[117]">
-                <div className="flex justify-between items-center self-stretch shrink-0 flex-wrap relative z-[118]">
-                  <div className="flex w-[160px] flex-col items-center flex-nowrap relative z-[119]">
-                    <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#896660] relative text-center whitespace-nowrap z-[120]">
-                      About Us
-                    </span>
-                  </div>
-                  <div className="flex w-[160px] flex-col items-center flex-nowrap relative z-[121]">
-                    <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#896660] relative text-center whitespace-nowrap z-[122]">
-                      Contact
-                    </span>
-                  </div>
-                  <div className="flex w-[160px] flex-col items-center flex-nowrap relative z-[123]">
-                    <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#896660] relative text-center whitespace-nowrap z-[124]">
-                      Terms of Service
-                    </span>
-                  </div>
-                </div>
-                <div className="flex gap-[16px] justify-center items-start self-stretch shrink-0 flex-wrap relative z-[125]">
-                  <div className="flex w-[24px] flex-col items-center flex-nowrap relative z-[126]">
-                    <div className="flex w-[24px] flex-col items-center grow shrink-0 basis-0 flex-nowrap relative z-[127]">
-                      <div className="w-[24px] grow shrink-0 basis-0 relative overflow-hidden z-[128]">
-                        <div className="w-[24px] h-[24px] bg-cover bg-no-repeat absolute top-0 left-0 z-[129]" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex w-[24px] flex-col items-center flex-nowrap relative z-[130]">
-                    <div className="flex w-[24px] flex-col items-center grow shrink-0 basis-0 flex-nowrap relative z-[131]">
-                      <div className="w-[24px] grow shrink-0 basis-0 relative overflow-hidden z-[132]">
-                        <div className="w-[24px] h-[24px] bg-cover bg-no-repeat absolute top-0 left-0 z-[133]" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex w-[24px] flex-col items-center flex-nowrap relative z-[134]">
-                    <div className="flex w-[24px] flex-col items-center grow shrink-0 basis-0 flex-nowrap relative z-[135]">
-                      <div className="w-[24px] grow shrink-0 basis-0 relative overflow-hidden z-[136]">
-                        <div className="w-[24px] h-[24px] bg-cover bg-no-repeat absolute top-0 left-0 z-[137]" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-col items-center self-stretch shrink-0 flex-nowrap relative z-[138]">
-                  <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#896660] relative text-center whitespace-nowrap z-[139]">
-                    @2023 D'ori
-                  </span>
                 </div>
               </div>
             </div>

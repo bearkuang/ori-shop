@@ -155,42 +155,6 @@ const ItemDetailPage: React.FC = () => {
 
     return (
         <div className='main-container flex w-[1280px] flex-col items-start flex-nowrap bg-[#fff] relative mx-auto my-0'>
-            <div className='flex pt-[12px] pr-[40px] pb-[12px] pl-[40px] justify-between items-center self-stretch shrink-0 flex-nowrap border-solid border-t border-t-[#e5e8ea] relative'>
-                <div className='flex w-[72px] gap-[16px] items-center shrink-0 flex-nowrap relative z-[1]'>
-                    <div className='flex w-[16px] flex-col items-start shrink-0 flex-nowrap relative z-[2]'>
-                        <div className='w-[16px] grow shrink-0 basis-0 bg-cover bg-no-repeat relative overflow-hidden z-[3]' />
-                    </div>
-                    <div className='flex w-[40px] flex-col items-start shrink-0 flex-nowrap relative z-[4] cursor-pointer' onClick={handleGoToMain}>
-                        <span className="h-[23px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[18px] font-bold leading-[23px] text-[#161111] relative text-left whitespace-nowrap z-[5]">
-                            D'ori
-                        </span>
-                    </div>
-                </div>
-                <div className='flex gap-[32px] justify-end items-start grow shrink-0 basis-0 flex-nowrap relative z-[6]'>
-                    <div className='flex w-[160px] flex-col items-start shrink-0 flex-nowrap relative z-[7]'>
-                        <div className='flex items-start self-stretch grow shrink-0 basis-0 flex-nowrap rounded-[12px] relative z-[8]'>
-                            <div className='flex w-[40px] pt-0 pr-0 pb-0 pl-[16px] justify-center items-center self-stretch shrink-0 flex-nowrap bg-[#f4f2ef] rounded-tl-[12px] rounded-tr-none rounded-br-none rounded-bl-[12px] relative z-[9]'>
-                                <div className='h-[24px] grow shrink-0 basis-0 relative overflow-hidden z-10'>
-                                    <div className='w-[24px] h-[24px] bg-cover bg-no-repeat absolute top-0 left-0 z-[11]' />
-                                </div>
-                            </div>
-                            <div className='flex pt-[8px] pr-[16px] pb-[8px] pl-[8px] items-center self-stretch grow shrink-0 basis-0 flex-nowrap bg-[#f4f2ef] rounded-tl-none rounded-tr-[12px] rounded-br-[12px] rounded-bl-none relative overflow-hidden z-[12]'>
-                                <span className="h-[24px] shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#896660] relative text-left whitespace-nowrap z-[13]">
-                                    Search
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='flex w-[88px] gap-[12px] items-start shrink-0 flex-nowrap relative z-[14]'>
-                        <div className='flex flex-col items-center grow shrink-0 basis-0 flex-nowrap relative z-20'>
-                            <img src="https://i.ibb.co/VQM6YLp/smart-cart.png" alt="Profile Edit" className="w-[40px] h-[40px] rounded-full" />
-                        </div>
-                        <div className='flex flex-col items-center grow shrink-0 basis-0 flex-nowrap relative z-20'>
-                            <img src="https://i.ibb.co/tB6CY38/user-icon.png" alt="Profile Edit" className="w-[40px] h-[40px] rounded-full" />
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div className='flex flex-col items-start self-stretch shrink-0 flex-nowrap bg-[#fff] relative overflow-hidden z-[23]'>
                 <div className='flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[24]'>
                     <div className='flex pt-[20px] pr-[24px] pb-[20px] pl-[24px] gap-[4px] justify-center items-start self-stretch grow shrink-0 basis-0 flex-nowrap relative z-[25]'>
@@ -256,9 +220,6 @@ const ItemDetailPage: React.FC = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className='flex items-start self-stretch grow shrink-0 basis-0 flex-nowrap relative z-[203]'>
-                                            <div className='flex w-[164px] pt-[16px] pr-[164px] pb-[16px] pl-0 flex-col gap-[4px] items-start self-stretch shrink-0 flex-nowrap border-solid border-b border-b-[#e5e8ea] relative z-[204]' />
-                                        </div>
                                     </div>
                                     <div className='flex pt-[20px] pr-[16px] pb-[12px] pl-[16px] flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[205]'>
                                         <span className="h-[28px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[22px] font-bold leading-[28px] text-[#1c0f0c] relative text-left whitespace-nowrap z-[206]">
@@ -292,9 +253,6 @@ const ItemDetailPage: React.FC = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className='flex items-start self-stretch grow shrink-0 basis-0 flex-nowrap relative z-[203]'>
-                                        <div className='flex w-[164px] pt-[16px] pr-[164px] pb-[16px] pl-0 flex-col gap-[4px] items-start self-stretch shrink-0 flex-nowrap border-solid border-b border-b-[#e5e8ea] relative z-[204]' />
                                     </div>
                                 </div>
                             </div>
@@ -366,12 +324,6 @@ const ItemDetailPage: React.FC = () => {
                                 <span className="flex w-[836px] h-[72px] justify-start items-start self-stretch shrink-0 font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#1c0f0c] relative text-left z-[70]">
                                     {item.item_description}
                                 </span>
-                            </div>
-                            {/* 상품 색상 정보 */}
-                            <div className='flex pt-[16px] pr-[16px] pb-[16px] pl-[16px] gap-[20px] items-start self-stretch shrink-0 flex-wrap relative z-[73]'>
-                                {item.options.map((option) => (
-                                    <div key={option.id} className='flex w-[40px] h-[40px] flex-col items-start flex-nowrap rounded-[20px] border-solid border border-[#e8d1ce] relative z-[74]' style={{ backgroundColor: option.opt_color }} />
-                                ))}
                             </div>
                             {/* Customer Reviews */}
                             <div className='flex pt-[16px] pr-[16px] pb-[8px] pl-[16px] flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[76]'>
