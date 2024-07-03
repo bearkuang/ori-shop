@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 
 const Header: React.FC = () => {
     const navigate = useNavigate();
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, isCompany } = useAuth();
 
     const handleGoToMain = () => {
         navigate("/");
@@ -15,11 +15,15 @@ const Header: React.FC = () => {
     }
 
     const handleMypage = () => {
-        navigate("/mypage");
+        if (isCompany) {
+            navigate("/companypage");
+        } else {
+            navigate("/mypage");
+        }
     }
 
     return (
-        <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-10">
+        <div className="flex flex-col items-start self-stretch shrink-0 border-solid border-b border-b-[#e8d1ce] flex-nowrap relative z-10">
             <div className='flex py-3 px-10 justify-between items-center self-stretch shrink-0 flex-nowrap border-solid border-t border-t-gray-300 relative'>
                 <div className='flex gap-4 items-center shrink-0 flex-nowrap relative'>
                     <div className='flex w-10 flex-col items-start shrink-0 flex-nowrap relative'>
@@ -52,7 +56,11 @@ const Header: React.FC = () => {
                         </div>
                         {isAuthenticated ? (
                             <div className='flex flex-col items-center grow shrink-0 flex-nowrap relative cursor-pointer' onClick={handleMypage}>
-                                <img src="https://i.ibb.co/tB6CY38/user-icon.png" alt="Profile Edit" className="w-10 h-10 rounded-full" />
+                                <img
+                                    src={isCompany ? "https://i.ibb.co/QXhPdy3/icon-office.png" : "https://i.ibb.co/tB6CY38/user-icon.png"}
+                                    alt={isCompany ? "Company Page" : "Profile Edit"}
+                                    className="w-10 h-10 rounded-full"
+                                />
                             </div>
                         ) : (
                             <button onClick={handleGoToSingIn} className="login-button flex pt-[8px] pr-[8px] pb-[8px] pl-[8px] justify-center items-center shrink-0 flex-nowrap bg-[#f46047] rounded-[12px] relative overflow-hidden font-['Epilogue'] text-[16px] font-bold leading-[24px] text-[#fff] text-center">Login</button>

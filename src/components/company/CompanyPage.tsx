@@ -1,39 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import OrderHistory from './OrderHistory';
-import LikedProducts from './LikedProducts';
-import ProductReviews from './ProductReviews';
+import AddProduct from './AddProduct';
 
-const MyPage: React.FC = () => {
+const CompanyPage: React.FC = () => {
     const navigate = useNavigate();
     const { isAuthenticated, logout } = useAuth();
-    const [showOrderHistory, setShowOrderHistory] = useState(false);
-    const [showLikedProducts, setShowLikedProducts] = useState(false);
-    const [showProductReviews, setShowProductReviews] = useState(false);
+    const [showAddProduct, setShowAddProduct] = useState(false);
 
-    const toggleOrderHistory = () => {
-        setShowOrderHistory(true);
-        setShowLikedProducts(false);
-        setShowProductReviews(false);
+    const toggleAddProduct = () => {
+        setShowAddProduct(true);
     }
 
-    const toggleLikedProducts = () => {
-        setShowLikedProducts(true);
-        setShowOrderHistory(false);
-        setShowProductReviews(false);
-    }
-
-    const toggleProductReviews = () => {
-        setShowProductReviews(true);
-        setShowOrderHistory(false);
-        setShowLikedProducts(false);
-    }
-
-    const showMyPage = () => {
-        setShowOrderHistory(false);
-        setShowLikedProducts(false);
-        setShowProductReviews(false);
+    const showCompanyPage = () => {
+        setShowAddProduct(false);
     }
 
     return (
@@ -47,7 +27,7 @@ const MyPage: React.FC = () => {
                                     <div className='flex flex-col gap-[8px] items-start self-stretch grow shrink-0 basis-0 flex-nowrap relative z-[6]'>
                                         <div
                                             className='flex pt-[8px] pr-[12px] pb-[8px] pl-[12px] gap-[12px] items-center self-stretch shrink-0 flex-nowrap bg-[#f4e8e8] rounded-[12px] relative z-[7] cursor-pointer'
-                                            onClick={showMyPage}
+                                            onClick={showCompanyPage}
                                         >
                                             <div className='flex w-[24px] flex-col items-start shrink-0 flex-nowrap relative z-[8]'>
                                                 <div className='w-[24px] grow shrink-0 basis-0 relative overflow-hidden z-[9]'>
@@ -79,12 +59,8 @@ const MyPage: React.FC = () => {
                             </div>
                         </div>
                         <div className='flex h-[700px] flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[28]'>
-                            {showOrderHistory ? (
-                                <OrderHistory />
-                            ) : showLikedProducts ? (
-                                <LikedProducts />
-                            ) : showProductReviews ? (
-                                <ProductReviews />
+                            {showAddProduct ? (
+                                <AddProduct />
                             ) : (
                                 <>
                                     <div className='flex pt-[20px] pr-[16px] pb-[12px] pl-[16px] flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[29]'>
@@ -94,11 +70,10 @@ const MyPage: React.FC = () => {
                                     </div>
                                     <div
                                         className='flex h-[56px] pt-0 pr-[16px] pb-0 pl-[16px] justify-between items-center self-stretch shrink-0 flex-nowrap bg-[#fff] relative z-[31] cursor-pointer'
-                                        onClick={toggleOrderHistory}
                                     >
                                         <div className='flex flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[32]'>
                                             <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#1c0f0c] relative text-left overflow-hidden whitespace-nowrap z-[33]">
-                                                Order History
+                                                Order List
                                             </span>
                                         </div>
                                         <div className='flex w-[28px] flex-col items-start shrink-0 flex-nowrap relative z-[34]'>
@@ -111,16 +86,16 @@ const MyPage: React.FC = () => {
                                     </div>
                                     <div className='flex pt-[20px] pr-[16px] pb-[12px] pl-[16px] flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[45]'>
                                         <span className="h-[28px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[22px] font-bold leading-[28px] text-[#1c0f0c] relative text-left whitespace-nowrap z-[46]">
-                                            My Activities
+                                            Product
                                         </span>
                                     </div>
                                     <div
                                         className='flex h-[56px] pt-0 pr-[16px] pb-0 pl-[16px] justify-between items-center self-stretch shrink-0 flex-nowrap bg-[#fff] relative z-[31] cursor-pointer'
-                                        onClick={toggleProductReviews}
+                                        onClick={toggleAddProduct}
                                     >
                                         <div className='flex flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[48]'>
                                             <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#1c0f0c] relative text-left overflow-hidden whitespace-nowrap z-[49]">
-                                                Product Reviews
+                                                Add Product
                                             </span>
                                         </div>
                                         <div className='flex w-[28px] flex-col items-start shrink-0 flex-nowrap relative z-50'>
@@ -131,30 +106,16 @@ const MyPage: React.FC = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='flex h-[56px] pt-0 pr-[16px] pb-0 pl-[16px] justify-between items-center self-stretch shrink-0 flex-nowrap bg-[#fff] relative z-[54] cursor-pointer' onClick={toggleLikedProducts}>
+                                    <div className='flex h-[56px] pt-0 pr-[16px] pb-0 pl-[16px] justify-between items-center self-stretch shrink-0 flex-nowrap bg-[#fff] relative z-[54] cursor-pointer'>
                                         <div className='flex flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[55]'>
                                             <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#1c0f0c] relative text-left overflow-hidden whitespace-nowrap z-[56]">
-                                                Liked Products
+                                                Added Product
                                             </span>
                                         </div>
                                         <div className='flex w-[28px] flex-col items-start shrink-0 flex-nowrap relative z-[57]'>
                                             <div className='flex w-[28px] justify-center items-center grow shrink-0 basis-0 flex-nowrap relative z-[58]'>
                                                 <div className='w-[24px] h-[24px] shrink-0 relative overflow-hidden z-[59]'>
                                                     <div className='w-[24px] h-[24px] bg-cover bg-no-repeat absolute top-0 left-0 z-[60]' />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className='flex h-[56px] pt-0 pr-[16px] pb-0 pl-[16px] justify-between items-center self-stretch shrink-0 flex-nowrap bg-[#fff] relative z-[61]'>
-                                        <div className='flex flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[62]'>
-                                            <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#1c0f0c] relative text-left overflow-hidden whitespace-nowrap z-[63]">
-                                                Shopping Cart
-                                            </span>
-                                        </div>
-                                        <div className='flex w-[28px] flex-col items-start shrink-0 flex-nowrap relative z-[64]'>
-                                            <div className='flex w-[28px] justify-center items-center grow shrink-0 basis-0 flex-nowrap relative z-[65]'>
-                                                <div className='w-[24px] h-[24px] shrink-0 relative overflow-hidden z-[66]'>
-                                                    <div className='w-[24px] h-[24px] bg-cover bg-no-repeat absolute top-0 left-0 z-[67]' />
                                                 </div>
                                             </div>
                                         </div>
@@ -202,4 +163,4 @@ const MyPage: React.FC = () => {
     );
 };
 
-export default MyPage;
+export default CompanyPage;

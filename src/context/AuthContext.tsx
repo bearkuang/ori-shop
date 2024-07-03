@@ -1,8 +1,10 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
     isAuthenticated: boolean;
-    login: (token: string) => void;
+    isCompany: boolean;
+    login: (token: string, userType: string) => void;
     logout: () => void;
 }
 
@@ -10,26 +12,35 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [isCompany, setIsCompany] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+        const userType = localStorage.getItem('userType');
         if (token) {
             setIsAuthenticated(true);
+            setIsCompany(userType === 'company');
         }
     }, []);
 
-    const login = (token: string) => {
+    const login = (token: string, userType: string) => {
         localStorage.setItem('token', token);
+        localStorage.setItem('userType', userType);
         setIsAuthenticated(true);
+        setIsCompany(userType === 'company');
     };
 
     const logout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('userType');
         setIsAuthenticated(false);
+        setIsCompany(false);
+        navigate('/');
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, isCompany, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

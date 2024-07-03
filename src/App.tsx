@@ -9,11 +9,12 @@ import CategorizedItemPage from './components/item/CategorizedItemPage';
 import ItemDetailPage from './components/item/ItemDetailPage';
 import CustomerSignIn from './components/customer/CustomerSignIn';
 import MyPage from './components/customer/MyPage';
+import CompanyPage from './components/company/CompanyPage';
 
 const App: React.FC = () => {
   return (
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <div className="main-container flex flex-col items-start bg-white relative mx-auto my-0">
           <Header />
           <Routes>
@@ -23,10 +24,12 @@ const App: React.FC = () => {
             <Route path="/signin" element={<CustomerSignIn />} />
             <Route path="/item/:itemId/info" element={<ItemDetailPage />} />
             <Route path="/mypage" element={<MyPage />} />
-          </Routes><Footer />
+            <Route path="/companypage" element={<CompanyPage />} />
+          </Routes>
+          <Footer />
         </div>
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 };
 

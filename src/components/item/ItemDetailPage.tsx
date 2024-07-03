@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { FaStar, FaThumbsUp, FaThumbsDown, FaComment } from 'react-icons/fa';
+import ReviewStats from './ReviewStats';
 import axios from 'axios';
 
 interface Item {
@@ -15,7 +17,12 @@ interface Item {
     item_price: number;
     item_soldout: string;
     item_is_display: string;
-    item_company: string;
+    item_company: {
+        id: number;
+        username: string;
+        name: string;
+        email: string;
+    }
     images: Array<{
         id: number;
         file: string;
@@ -36,7 +43,16 @@ interface Item {
         review_contents: string;
         review_create_date: string;
         review_image: string;
+        customer_username: string;
     }>;
+    rating_stats: {
+        total_reviews: number;
+        average_rating: number;
+        rating_stats: {
+            [key: string]: number;
+        }
+    }
+    average_rating: number;
 }
 
 const ItemDetailPage: React.FC = () => {
@@ -93,10 +109,6 @@ const ItemDetailPage: React.FC = () => {
 
     if (!item) {
         return <div>Item not found</div>;
-    }
-
-    const handleGoToMain = () => {
-        navigate("/");
     }
 
     const handleBuyClick = () => {
@@ -166,7 +178,7 @@ const ItemDetailPage: React.FC = () => {
                                 {/* 상품 기업 이름 */}
                                 <div className='flex w-[75px] flex-col items-start flex-nowrap relative z-[29]'>
                                     <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-medium leading-[24px] text-[#9b5149] relative text-left whitespace-nowrap z-30">
-                                        {item.item_company}
+                                        {item.item_company.username}
                                     </span>
                                 </div>
                                 <div className='flex w-[5px] flex-col items-start flex-nowrap relative z-[31]'>
@@ -199,8 +211,8 @@ const ItemDetailPage: React.FC = () => {
                                                 </div>
                                                 {/* 상품 색상 정보 */}
                                                 <div className='flex pt-[16px] pr-[16px] pb-[16px] pl-[16px] gap-[20px] items-start self-stretch shrink-0 flex-wrap relative z-[73]'>
-                                                    {item.options.map((option) => (
-                                                        <div key={option.id} className='flex w-[40px] h-[40px] flex-col items-start flex-nowrap rounded-[20px] border-solid border border-[#e8d1ce] relative z-[74]' style={{ backgroundColor: option.opt_color }} />
+                                                    {Array.from(new Set(item.options.map((option) => option.opt_color))).map((color, index) => (
+                                                        <div key={index} className='flex w-[40px] h-[40px] flex-col items-start flex-nowrap rounded-[20px] border-solid border border-[#e8d1ce] relative z-[74]' style={{ backgroundColor: color }} />
                                                     ))}
                                                 </div>
                                             </div>
@@ -212,9 +224,9 @@ const ItemDetailPage: React.FC = () => {
                                                 </div>
                                                 {/* 상품 사이즈 정보 */}
                                                 <div className='flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[201]'>
-                                                    {item.options.map((option, index) => (
+                                                    {Array.from(new Set(item.options.map((option) => option.opt_size))).map((size, index) => (
                                                         <span key={index} className="h-[21px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[14px] font-normal leading-[21px] text-[#1c0f0c] relative text-left whitespace-nowrap z-[202]">
-                                                            {option.opt_size}
+                                                            {size}
                                                         </span>
                                                     ))}
                                                 </div>
@@ -281,24 +293,18 @@ const ItemDetailPage: React.FC = () => {
                             <div className='flex pt-[8px] pr-[16px] pb-[8px] pl-[16px] gap-[16px] items-start self-stretch shrink-0 flex-wrap relative z-[45]'>
                                 <div className='flex w-[82px] pt-[8px] pr-[12px] pb-[8px] pl-[12px] gap-[8px] justify-center items-center flex-nowrap relative z-[46]'>
                                     {/* 좋아요 버튼 */}
-                                    <div className='flex w-[24px] flex-col items-start shrink-0 flex-nowrap relative z-[47]'>
-                                        <div className='w-[24px] grow shrink-0 basis-0 relative overflow-hidden z-[48]'>
-                                            <div className='w-[24px] h-[24px] bg-cover bg-no-repeat absolute top-0 left-0 z-[49]' />
-                                        </div>
-                                    </div>
-                                    {/* 좋아요 수 */}
-                                    <div className='flex w-[26px] flex-col items-start shrink-0 flex-nowrap relative z-50'>
+                                    <button className='flex items-center gap-2 text-gray-600 hover:text-blue-500'>
+                                        <FaThumbsUp className="text-xl" />
+                                        {/* 좋아요 수 */}
                                         <span className="h-[20px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[13px] font-bold leading-[20px] text-[#9b5149] relative text-left whitespace-nowrap z-[51]">
                                             {item.likes}
                                         </span>
-                                    </div>
+                                    </button>
                                 </div>
                                 <div className='flex w-[84px] pt-[8px] pr-[12px] pb-[8px] pl-[12px] gap-[8px] justify-center items-center flex-nowrap relative z-[52]'>
                                     {/* 댓글 아이콘 */}
                                     <div className='flex w-[24px] flex-col items-start shrink-0 flex-nowrap relative z-[53]'>
-                                        <div className='w-[24px] grow shrink-0 basis-0 relative overflow-hidden z-[54]'>
-                                            <div className='w-[24px] h-[24px] bg-cover bg-no-repeat absolute top-0 left-0 z-[55]' />
-                                        </div>
+                                        <FaComment className="text-xl" />
                                     </div>
                                     {/* 리뷰 수 */}
                                     <div className='flex w-[28px] flex-col items-start shrink-0 flex-nowrap relative z-[56]'>
@@ -325,6 +331,12 @@ const ItemDetailPage: React.FC = () => {
                                     {item.item_description}
                                 </span>
                             </div>
+                            {/* ReviewStats 컴포넌트 */}
+                            <div className='flex pt-0 pr-0 pb-0 pl-0 w-3/5 gap-[32px] flex-col items-start self-stretch shrink-0 flex-nowrap relative overflow-hidden z-[78]'>
+                                {item && item.rating_stats && (
+                                    <ReviewStats ratingStats={item.rating_stats} />
+                                )}
+                            </div>
                             {/* Customer Reviews */}
                             <div className='flex pt-[16px] pr-[16px] pb-[8px] pl-[16px] flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[76]'>
                                 <span className="h-[23px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[18px] font-bold leading-[23px] text-[#1c0f0c] relative text-left whitespace-nowrap z-[77]">
@@ -337,9 +349,8 @@ const ItemDetailPage: React.FC = () => {
                                         {/* 리뷰 작성자 및 날짜 */}
                                         <div className='flex flex-col items-start self-stretch grow shrink-0 basis-0 flex-nowrap relative z-[80]'>
                                             <div className='flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[81]'>
-                                                <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-medium leading-[24px] text-[#1c0f0c] relative text-left whitespace-nowrap z-[82]">
-                                                    {/* 리뷰 작성자 이름을 표시할 수 있다면 여기에 추가 */}
-                                                    Reviewer
+                                                <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[20px] font-semibold leading-[10px] text-[#1c0f0c] relative text-left whitespace-nowrap z-[82]">
+                                                    {review.customer_username}
                                                 </span>
                                             </div>
                                             <div className='flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[83]'>
@@ -351,48 +362,31 @@ const ItemDetailPage: React.FC = () => {
                                         {/* 리뷰 별점 */}
                                         <div className='flex gap-[2px] items-start self-stretch shrink-0 flex-nowrap relative z-[85]'>
                                             {[1, 2, 3, 4, 5].map((star) => (
-                                                <div key={star} className='flex w-[20px] flex-col items-start shrink-0 flex-nowrap relative z-[86]'>
-                                                    <div className='w-[20px] grow shrink-0 basis-0 relative overflow-hidden z-[87]'>
-                                                        <div className={`w-[20px] h-[20px] bg-cover bg-no-repeat absolute top-0 left-0 z-[88] ${star <= review.review_star ? 'text-yellow-400' : 'text-gray-300'}`}>
-                                                            ★
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <FaStar key={star} className={`text-2xl ${star <= review.review_star ? 'text-yellow-400' : 'text-gray-300'}`} />
                                             ))}
                                         </div>
+                                        {/* 리뷰 이미지가 있다면 표시 */}
+                                        {review.review_image !== '0' && (
+                                            <div className='flex w-[100px] h-[100px] relative z-[103]'>
+                                                <img src={review.review_image} alt="Review" className='w-full h-full object-cover' />
+                                            </div>
+                                        )}
                                         {/* 리뷰 내용 */}
                                         <div className='flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[101]'>
                                             <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#1c0f0c] relative text-left whitespace-nowrap z-[102]">
                                                 {review.review_contents}
                                             </span>
                                         </div>
-                                        {/* 리뷰 이미지가 있다면 표시 */}
-                                        {review.review_image && review.review_image !== '0' && (
-                                            <div className='flex w-[100px] h-[100px] relative z-[103]'>
-                                                <img src={review.review_image} alt="Review" className='w-full h-full object-cover' />
-                                            </div>
-                                        )}
-                                        {/* 리뷰 좋아요/싫어요 버튼 (옵션) */}
+                                        {/* 리뷰 좋아요/싫어요 버튼 */}
                                         <div className='flex gap-[36px] items-start self-stretch shrink-0 flex-nowrap relative z-[103]'>
-                                            <div className='flex w-[38px] gap-[8px] items-center shrink-0 flex-nowrap relative z-[104]'>
-                                                <div className='flex w-[20px] flex-col items-center shrink-0 flex-nowrap relative z-[105]'>
-                                                    <div className='w-[20px] grow shrink-0 basis-0 relative overflow-hidden z-[106]'>
-                                                        <div className='w-[20px] h-[20px] bg-cover bg-no-repeat absolute top-0 left-0 z-[107]'>👍</div>
-                                                    </div>
-                                                </div>
-                                                <div className='flex w-[10px] flex-col items-center shrink-0 flex-nowrap relative z-[108]'>
-                                                    <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#9b5149] relative text-center whitespace-nowrap z-[109]">
-                                                        0
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div className='flex w-[20px] h-[24px] gap-[8px] items-center shrink-0 flex-nowrap relative z-[110]'>
-                                                <div className='flex flex-col items-center grow shrink-0 basis-0 flex-nowrap relative z-[111]'>
-                                                    <div className='self-stretch grow shrink-0 basis-0 relative overflow-hidden z-[112]'>
-                                                        <div className='w-[20px] h-[20px] bg-cover bg-no-repeat absolute top-0 left-0 z-[113]'>👎</div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <button className='flex items-center gap-2 text-gray-600 hover:text-blue-500'>
+                                                <FaThumbsUp className="text-xl" />
+                                                <span>0</span>
+                                            </button>
+                                            <button className='flex items-center gap-2 text-gray-600 hover:text-red-500'>
+                                                <FaThumbsDown className="text-xl" />
+                                                <span>0</span>
+                                            </button>
                                         </div>
                                     </div>
                                 ))}

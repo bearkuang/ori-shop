@@ -43,6 +43,10 @@ const MainPage: React.FC = () => {
     fetchNewItems();
   }, []);
 
+  const handleShowItems = () => {
+    navigate("/category");
+  }
+
   return (
     <div className="main-container flex w-[1280px] flex-col items-start flex-nowrap bg-[#fff] relative mx-auto my-0">
       <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap bg-[#fff] relative overflow-hidden">
@@ -65,7 +69,7 @@ const MainPage: React.FC = () => {
                         </span>
                       </div>
                     </div>
-                    <div className="flex w-[121px] h-[48px] pt-0 pr-[20px] pb-0 pl-[20px] justify-center items-center flex-nowrap bg-[#f46047] rounded-[24px] relative overflow-hidden z-[35] mt-[32px] mr-0 mb-0 ml-[56px]">
+                    <div className="flex w-[121px] h-[48px] pt-0 pr-[20px] pb-0 pl-[20px] justify-center items-center flex-nowrap bg-[#f46047] rounded-[24px] relative overflow-hidden z-[35] mt-[32px] mr-0 mb-0 ml-[56px] cursor-pointer" onClick={handleShowItems}>
                       <div className="flex w-[81px] flex-col items-center shrink-0 flex-nowrap relative overflow-hidden z-[36]">
                         <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-bold leading-[24px] text-[#fff] relative text-center overflow-hidden whitespace-nowrap z-[37]">
                           Shop Now

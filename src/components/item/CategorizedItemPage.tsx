@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface SubCategory {
     id: number;
@@ -208,7 +208,10 @@ const CategorizedItemPage: React.FC = () => {
                             {error && <div className="text-red-500">{error}</div>}
                             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4'>
                                 {items.map(item => (
-                                    <div key={item.id} className='flex flex-col'>
+                                    <Link
+                                        key={item.id}
+                                        className='flex flex-col'
+                                        to={`/item/${item.id}/info`}>
                                         <div className='h-44 bg-cover bg-no-repeat rounded-lg relative overflow-hidden'
                                             style={{ backgroundImage: `url(${item.images[0]?.file})` }} />
                                         <span className="text-base font-medium text-gray-900">
@@ -217,7 +220,7 @@ const CategorizedItemPage: React.FC = () => {
                                         <span className="text-sm text-gray-600">
                                             ₩{item.item_price}
                                         </span>
-                                    </div>
+                                    </Link>
                                 ))}
                             </div>
                         </div>
@@ -245,7 +248,10 @@ const CategorizedItemPage: React.FC = () => {
                         <div className='flex pt-4 pr-4 pb-4 pl-4 flex-col gap-3 items-start self-stretch shrink-0 relative'>
                             <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4'>
                                 {items.map(item => (
-                                    <div key={item.id} className='flex flex-col'>
+                                    <Link
+                                        key={item.id}
+                                        className='flex flex-col'
+                                        to={`/item/${item.id}/info`}>
                                         <div className='h-44 bg-cover bg-no-repeat rounded-lg relative overflow-hidden'
                                             style={{ backgroundImage: `url(${item.images[0]?.file})` }} />
                                         <span className="text-base font-medium text-gray-900">
@@ -254,7 +260,7 @@ const CategorizedItemPage: React.FC = () => {
                                         <span className="text-sm text-gray-600">
                                             ₩{item.item_price}
                                         </span>
-                                    </div>
+                                    </Link>
                                 ))}
                             </div>
                         </div>

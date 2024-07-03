@@ -8,21 +8,21 @@ const CustomerSignUp: React.FC = () => {
     const [isCodeSent, setIsCodeSent] = useState(false);
     const [countdown, setCountdown] = useState(0);
     const [formData, setFormData] = useState({
-        cust_username: '',
-        cust_name: '',
-        cust_password: '',
+        username: '',
+        name: '',
+        password: '',
         confirm_password: '',
-        cust_gender: 'F',
-        cust_birthday: '',
-        cust_address: '',
-        cust_email: ''
+        gender: 'F',
+        birthday: '',
+        address: '',
+        email: ''
     });
 
     const navigate = useNavigate();
 
     const [errors, setErrors] = useState({
-        cust_username: '',
-        cust_email: ''
+        username: '',
+        email: ''
     })
 
     const startTimer = () => {
@@ -42,12 +42,12 @@ const CustomerSignUp: React.FC = () => {
 
     const requestVerification = async (e: React.MouseEvent) => {
         e.preventDefault();
-        if (!formData.cust_email) {
+        if (!formData.email) {
             alert("Please enter your email address.");
             return;
         }
         try {
-            await axios.post('http://localhost:8000/api/customers/request_verification/', { email: formData.cust_email });
+            await axios.post('http://localhost:8000/api/customers/request_verification/', { email: formData.email });
             startTimer();
         } catch (error) {
             console.error('Failed to send verification code', error);
@@ -60,12 +60,12 @@ const CustomerSignUp: React.FC = () => {
             // 먼저 이메일 중복 체크
             await checkDuplicate();
 
-            if (errors.cust_email) {
+            if (errors.email) {
                 return; // 이메일이 중복되면 인증 과정 중단
             }
 
             await axios.post('http://localhost:8000/api/customers/verify_email/', {
-                email: formData.cust_email,
+                email: formData.email,
                 code: verificationCode
             });
             setIsEmailVerified(true);
@@ -90,7 +90,7 @@ const CustomerSignUp: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (formData.cust_password !== formData.confirm_password) {
+        if (formData.password !== formData.confirm_password) {
             alert("Passwords do not match");
             return;
         }
@@ -104,7 +104,7 @@ const CustomerSignUp: React.FC = () => {
             await checkDuplicate();
 
             // 중복이 있는 경우 제출 중단
-            if (errors.cust_username || errors.cust_email) {
+            if (errors.username || errors.email) {
                 return;
             }
 
@@ -126,13 +126,13 @@ const CustomerSignUp: React.FC = () => {
     const checkDuplicate = async () => {
         try {
             const response = await axios.post('http://localhost:8000/api/customers/check_duplicate/', {
-                cust_username: formData.cust_username,
-                cust_email: formData.cust_email
+                username: formData.username,
+                email: formData.email
             });
             // 중복이 없는 경우
             setErrors({
-                cust_username: '',
-                cust_email: ''
+                username: '',
+                email: ''
             });
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
@@ -181,15 +181,15 @@ const CustomerSignUp: React.FC = () => {
                                         </div>
                                         <div className="flex h-[56px] pt-[15px] pr-[15px] pb-[15px] pl-[15px] items-center self-stretch shrink-0 flex-nowrap bg-[#fff] rounded-[12px] border-solid border border-[#e5dbdb] relative overflow-hidden z-[19]">
                                             <input
-                                                name="cust_username"
+                                                name="username"
                                                 placeholder="Enter your username"
                                                 className="w-full border-none outline-none"
-                                                value={formData.cust_username}
+                                                value={formData.username}
                                                 onChange={handleChange}
                                             />
                                         </div>
-                                        {errors.cust_username && (
-                                            <span className="text-red-500 text-sm mt-1">{errors.cust_username}</span>
+                                        {errors.username && (
+                                            <span className="text-red-500 text-sm mt-1">{errors.username}</span>
                                         )}
                                     </div>
                                 </div>
@@ -202,10 +202,10 @@ const CustomerSignUp: React.FC = () => {
                                         </div>
                                         <div className="flex h-[56px] pt-[15px] pr-[15px] pb-[15px] pl-[15px] items-center self-stretch shrink-0 flex-nowrap bg-[#fff] rounded-[12px] border-solid border border-[#e5dbdb] relative overflow-hidden z-[19]">
                                             <input
-                                                name="cust_name"
+                                                name="name"
                                                 placeholder="Enter your name"
                                                 className="w-full border-none outline-none"
-                                                value={formData.cust_name}
+                                                value={formData.name}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -220,16 +220,16 @@ const CustomerSignUp: React.FC = () => {
                                         </div>
                                         <div className="flex h-[56px] pt-[15px] pr-[15px] pb-[15px] pl-[15px] items-center self-stretch shrink-0 flex-nowrap bg-[#fff] rounded-[12px] border-solid border border-[#e5dbdb] relative overflow-hidden z-[25]">
                                             <input
-                                                name="cust_email"
+                                                name="email"
                                                 type="email"
                                                 placeholder="Enter your email"
                                                 className="w-full border-none outline-none"
-                                                value={formData.cust_email}
+                                                value={formData.email}
                                                 onChange={handleChange}
                                             />
                                         </div>
-                                        {errors.cust_email && (
-                                            <span className="text-red-500 text-sm mt-1">{errors.cust_email}</span>
+                                        {errors.email && (
+                                            <span className="text-red-500 text-sm mt-1">{errors.email}</span>
                                         )}
                                     </div>
                                     <button
@@ -272,11 +272,11 @@ const CustomerSignUp: React.FC = () => {
                                         </div>
                                         <div className="flex h-[56px] pt-[15px] pr-[15px] pb-[15px] pl-[15px] items-center self-stretch shrink-0 flex-nowrap bg-[#fff] rounded-[12px] border-solid border border-[#e5dbdb] relative overflow-hidden z-[31]">
                                             <input
-                                                name="cust_password"
+                                                name="password"
                                                 type="password"
                                                 placeholder="Enter your password"
                                                 className="w-full border-none outline-none"
-                                                value={formData.cust_password}
+                                                value={formData.password}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -310,10 +310,10 @@ const CustomerSignUp: React.FC = () => {
                                         </div>
                                         <div className="flex h-[56px] pt-[15px] pr-[15px] pb-[15px] pl-[15px] items-center self-stretch shrink-0 flex-nowrap bg-[#fff] rounded-[12px] border-solid border border-[#e5dbdb] relative overflow-hidden z-[31]">
                                             <input
-                                                name="cust_address"
+                                                name="address"
                                                 placeholder="Enter your address"
                                                 className="w-full border-none outline-none"
-                                                value={formData.cust_address}
+                                                value={formData.address}
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -328,10 +328,10 @@ const CustomerSignUp: React.FC = () => {
                                         </div>
                                         <div className="flex h-[56px] pt-[15px] pr-[15px] pb-[15px] pl-[15px] items-center self-stretch shrink-0 flex-nowrap bg-[#fff] rounded-[12px] border-solid border border-[#e5dbdb] relative overflow-hidden z-[31]">
                                             <input
-                                                name="cust_birthday"
+                                                name="birthday"
                                                 type="date"
                                                 className="w-full border-none outline-none"
-                                                value={formData.cust_birthday}
+                                                value={formData.birthday}
                                                 onChange={handleChange}
                                             />
                                         </div>
