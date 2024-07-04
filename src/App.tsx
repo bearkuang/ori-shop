@@ -10,6 +10,9 @@ import ItemDetailPage from './components/item/ItemDetailPage';
 import CustomerSignIn from './components/customer/CustomerSignIn';
 import MyPage from './components/customer/MyPage';
 import CompanyPage from './components/company/CompanyPage';
+import ProtectedAdminRoute from './context/ProtectedAdminRoute';
+import ManagerMain from './components/manager/ManagerMain';
+import ManaerSignIn from './components/manager/ManagerSingIn';
 
 const App: React.FC = () => {
   return (
@@ -25,6 +28,14 @@ const App: React.FC = () => {
             <Route path="/item/:itemId/info" element={<ItemDetailPage />} />
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/companypage" element={<CompanyPage />} />
+            <Route path="/manager/login" element={<ManaerSignIn />} />
+            <Route path="/manager/*" element={
+              <ProtectedAdminRoute>
+                <Routes>
+                  <Route path="dashboard" element={<ManagerMain />} />
+                </Routes>
+              </ProtectedAdminRoute>
+            } />
           </Routes>
           <Footer />
         </div>

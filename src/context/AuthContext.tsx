@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 interface AuthContextType {
     isAuthenticated: boolean;
     isCompany: boolean;
+    isStaff: boolean;
     login: (token: string, userType: string) => void;
     logout: () => void;
 }
@@ -13,6 +14,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [isCompany, setIsCompany] = useState<boolean>(false);
+    const [isStaff, setIsStaff] = useState<boolean>(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,6 +23,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         if (token) {
             setIsAuthenticated(true);
             setIsCompany(userType === 'company');
+            setIsStaff(userType === 'staff');
         }
     }, []);
 
@@ -29,6 +32,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         localStorage.setItem('userType', userType);
         setIsAuthenticated(true);
         setIsCompany(userType === 'company');
+        setIsStaff(userType === 'staff');
     };
 
     const logout = () => {
@@ -36,11 +40,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         localStorage.removeItem('userType');
         setIsAuthenticated(false);
         setIsCompany(false);
+        setIsStaff(false);
         navigate('/');
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, isCompany, login, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, isCompany, isStaff, login, logout }}>
             {children}
         </AuthContext.Provider>
     );

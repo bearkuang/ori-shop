@@ -2,18 +2,27 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import AddProduct from './AddProduct';
+import OrderList from './OrderList';
 
 const CompanyPage: React.FC = () => {
     const navigate = useNavigate();
     const { isAuthenticated, logout } = useAuth();
     const [showAddProduct, setShowAddProduct] = useState(false);
+    const [showOrderList, setShowOderList] = useState(false);
 
     const toggleAddProduct = () => {
         setShowAddProduct(true);
+        setShowOderList(false);
+    }
+
+    const toggleOrderList = () => {
+        setShowOderList(true);
+        setShowAddProduct(false);
     }
 
     const showCompanyPage = () => {
         setShowAddProduct(false);
+        setShowOderList(false);
     }
 
     return (
@@ -61,6 +70,8 @@ const CompanyPage: React.FC = () => {
                         <div className='flex h-[700px] flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[28]'>
                             {showAddProduct ? (
                                 <AddProduct />
+                            ) : showOrderList ? (
+                                <OrderList />
                             ) : (
                                 <>
                                     <div className='flex pt-[20px] pr-[16px] pb-[12px] pl-[16px] flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[29]'>
@@ -71,7 +82,10 @@ const CompanyPage: React.FC = () => {
                                     <div
                                         className='flex h-[56px] pt-0 pr-[16px] pb-0 pl-[16px] justify-between items-center self-stretch shrink-0 flex-nowrap bg-[#fff] relative z-[31] cursor-pointer'
                                     >
-                                        <div className='flex flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[32]'>
+                                        <div
+                                            className='flex flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[32]'
+                                            onClick={toggleOrderList}
+                                        >
                                             <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#1c0f0c] relative text-left overflow-hidden whitespace-nowrap z-[33]">
                                                 Order List
                                             </span>
