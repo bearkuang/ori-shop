@@ -50,6 +50,7 @@ interface OrderProduct {
     order_amount: number;
     review_enabled: string;
     order_product_status: string;
+    delivery_status: string;
 }
 
 interface Order {
@@ -166,6 +167,11 @@ const OrderHistory: React.FC = () => {
                                                 <div className='flex w-[49px] flex-col items-start shrink-0 flex-nowrap relative z-[17]'>
                                                     <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#1c0f0c] relative text-left whitespace-nowrap z-[18]">
                                                         ${Number(order.order_total_price).toFixed(2)}
+                                                    </span>
+                                                </div>
+                                                <div className='flex w-[49px] flex-col items-start shrink-0 flex-nowrap relative z-[17]'>
+                                                    <span className="h-[24px] mt-1 self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#1c0f0c] relative text-left whitespace-nowrap z-[18]">
+                                                        {product.delivery_status}
                                                     </span>
                                                 </div>
                                                 {/* 리뷰 작성하러 가기 */}

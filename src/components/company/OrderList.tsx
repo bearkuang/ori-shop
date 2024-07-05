@@ -49,6 +49,7 @@ interface OrderProduct {
     order_amount: number;
     review_enabled: string;
     order_product_status: string;
+    delivery_status: string;
 }
 
 interface Order {
@@ -93,6 +94,59 @@ const OrderList: React.FC = () => {
 
         fetchOrders();
     }, []);
+
+    const updateDeliveryStatus = async (productId: number, newStatus: string) => {
+        try {
+            const response = await axios.post(
+                `http://localhost:8000/api/companies/${productId}/update_delivery_status/`,
+                { delivery_status: newStatus },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                }
+            );
+
+            // 상태 업데이트 성공 시 주문 목록 새로고침
+            const updatedOrders = orders.map(order => ({
+                ...order,
+                order_products: order.order_products.map(product =>
+                    product.id === productId ? { ...product, delivery_status: newStatus } : product
+                )
+            }));
+            setOrders(updatedOrders);
+        } catch (error) {
+            console.error('Error updating delivery status:', error);
+            setError('배송 상태 업데이트에 실패했습니다.');
+        }
+    };
+
+    const renderDeliveryButtons = (product: OrderProduct) => {
+        switch (product.delivery_status) {
+            case '준비중':
+                return (
+                    <button
+                        onClick={() => updateDeliveryStatus(product.id, '배송시작')}
+                        className="bg-blue-500 text-white px-2 py-1 rounded"
+                    >
+                        배송시작
+                    </button>
+                );
+            case '배송시작':
+                return (
+                    <button
+                        onClick={() => updateDeliveryStatus(product.id, '배송완료')}
+                        className="bg-green-500 text-white px-2 py-1 rounded"
+                    >
+                        배송완료
+                    </button>
+                );
+            case '배송완료':
+                return <span className="text-green-600">배송완료</span>;
+            default:
+                return null;
+        }
+    };
 
     if (isLoading) return <div>로딩 중...</div>;
     if (error) return <div>{error}</div>;
@@ -146,12 +200,19 @@ const OrderList: React.FC = () => {
                                                     </div>
                                                 </div>
                                             </Link>
-                                            <div className='flex w-[49px] h-[93px] flex-col items-start shrink-0 flex-nowrap relative z-[16]'>
+                                            <div className='flex flex-col items-end justify-between h-[93px] relative z-[16]'>
                                                 {/* 주문 한 총 가격 */}
-                                                <div className='flex w-[49px] flex-col items-start shrink-0 flex-nowrap relative z-[17]'>
-                                                    <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#1c0f0c] relative text-left whitespace-nowrap z-[18]">
+                                                <div className='flex flex-col items-end shrink-0 relative z-[17]'>
+                                                    <span className="h-[24px] shrink-0 font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#1c0f0c] text-right whitespace-nowrap z-[18]">
                                                         ${Number(order.order_total_price).toFixed(2)}
                                                     </span>
+                                                </div>
+                                                {/* 배송 상태 및 배송 상태 업데이트 */}
+                                                <div className='flex flex-col items-end'>
+                                                    <span className="text-sm text-gray-600 mb-2">
+                                                        배송 상태: {product.delivery_status}
+                                                    </span>
+                                                    {renderDeliveryButtons(product)}
                                                 </div>
                                             </div>
                                         </div>

@@ -20,7 +20,7 @@ const CompanyPage: React.FC = () => {
         setShowAddProduct(false);
     }
 
-    const showCompanyPage = () => {
+    const toggleCompanyPage = () => {
         setShowAddProduct(false);
         setShowOderList(false);
     }
@@ -36,7 +36,7 @@ const CompanyPage: React.FC = () => {
                                     <div className='flex flex-col gap-[8px] items-start self-stretch grow shrink-0 basis-0 flex-nowrap relative z-[6]'>
                                         <div
                                             className='flex pt-[8px] pr-[12px] pb-[8px] pl-[12px] gap-[12px] items-center self-stretch shrink-0 flex-nowrap bg-[#f4e8e8] rounded-[12px] relative z-[7] cursor-pointer'
-                                            onClick={showCompanyPage}
+                                            onClick={toggleCompanyPage}
                                         >
                                             <div className='flex w-[24px] flex-col items-start shrink-0 flex-nowrap relative z-[8]'>
                                                 <div className='w-[24px] grow shrink-0 basis-0 relative overflow-hidden z-[9]'>
