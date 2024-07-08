@@ -47,7 +47,7 @@ const CustomerSignUp: React.FC = () => {
             return;
         }
         try {
-            await axios.post('http://localhost:8000/api/customers/request_verification/', { email: formData.email });
+            await axios.post('http://localhost:9100/api/customers/request_verification/', { email: formData.email });
             startTimer();
         } catch (error) {
             console.error('Failed to send verification code', error);
@@ -64,7 +64,7 @@ const CustomerSignUp: React.FC = () => {
                 return; // 이메일이 중복되면 인증 과정 중단
             }
 
-            await axios.post('http://localhost:8000/api/customers/verify_email/', {
+            await axios.post('http://localhost:9100/api/customers/verify_email/', {
                 email: formData.email,
                 code: verificationCode
             });
@@ -109,7 +109,7 @@ const CustomerSignUp: React.FC = () => {
             }
 
             // 회원가입 요청
-            const response = await axios.post('http://localhost:8000/api/auth/register/', {
+            const response = await axios.post('http://localhost:9100/api/auth/register/', {
                 ...formData,
                 verification_code: verificationCode
             });
@@ -125,7 +125,7 @@ const CustomerSignUp: React.FC = () => {
 
     const checkDuplicate = async () => {
         try {
-            const response = await axios.post('http://localhost:8000/api/customers/check_duplicate/', {
+            const response = await axios.post('http://localhost:9100/api/customers/check_duplicate/', {
                 username: formData.username,
                 email: formData.email
             });

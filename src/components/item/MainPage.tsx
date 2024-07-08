@@ -23,7 +23,7 @@ const MainPage: React.FC = () => {
   useEffect(() => {
     const fetchPopularItems = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/items/popular/');
+        const response = await axios.get('http://localhost:9100/api/items/popular/');
         setPopularItems(response.data);
       } catch (error) {
         console.error('Error fetching popular items', error);
@@ -32,7 +32,7 @@ const MainPage: React.FC = () => {
 
     const fetchNewItems = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/items/newest/');
+        const response = await axios.get('http://localhost:9100/api/items/newest/');
         setNewItems(response.data);
       } catch (error) {
         console.error('Error fetching new items', error);

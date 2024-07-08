@@ -77,7 +77,7 @@ const AddProduct: React.FC = () => {
         });
     
         try {
-            const response = await axios.post('http://localhost:8000/api/items/add_item/', data, {
+            const response = await axios.post('http://localhost:9100/api/items/add_item/', data, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,

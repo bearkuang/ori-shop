@@ -69,7 +69,7 @@ const CategorizedItemPage: React.FC = () => {
         setIsLoading(true);
         setError(null);
         try {
-            const response = await axios.get(`http://localhost:8000/api/categories/sub-categories/?main_cate_name=${mainCateName}`);
+            const response = await axios.get(`http://localhost:9100/api/categories/sub-categories/?main_cate_name=${mainCateName}`);
             setSubCategories(response.data);
         } catch (error) {
             console.error('서브 카테고리를 불러오는 데 실패했습니다:', error);
@@ -83,7 +83,7 @@ const CategorizedItemPage: React.FC = () => {
         setIsLoading(true);
         setError(null);
         try {
-            const response = await axios.get(`http://localhost:8000/api/items/categorized/?cate_no=${cateNo}`);
+            const response = await axios.get(`http://localhost:9100/api/items/categorized/?cate_no=${cateNo}`);
             setItems(response.data);
         } catch (error) {
             console.error('아이템을 불러오는 데 실패했습니다:', error);
@@ -112,8 +112,8 @@ const CategorizedItemPage: React.FC = () => {
         setError(null);
         try {
             let url = selectedSubCategory !== null
-                ? `http://localhost:8000/api/items/categorized/?cate_no=${selectedSubCategory}`
-                : 'http://localhost:8000/api/items/all/';
+                ? `http://localhost:9100/api/items/categorized/?cate_no=${selectedSubCategory}`
+                : 'http://localhost:9100/api/items/all/';
 
             if (colorFilter.length > 0) {
                 url += (url.includes('?') ? '&' : '?') + colorFilter.map(color => `color=${color}`).join('&');
@@ -138,7 +138,7 @@ const CategorizedItemPage: React.FC = () => {
         setIsLoading(true);
         setError(null);
         try {
-            const response = await axios.get('http://localhost:8000/api/items/all/');
+            const response = await axios.get('http://localhost:9100/api/items/all/');
             setItems(response.data);
         } catch (error) {
             console.error('전체 아이템을 불러오는 데 실패했습니다:', error);

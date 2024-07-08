@@ -22,7 +22,7 @@ const ManagerSignIn: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const endpoint = 'http://localhost:8000/api/auth/manager-login/';
+            const endpoint = 'http://localhost:9100/api/auth/manager-login/';
             const response = await axios.post(endpoint, formData);
             console.log('Login successful', response.data);
             login(response.data.access, 'staff');

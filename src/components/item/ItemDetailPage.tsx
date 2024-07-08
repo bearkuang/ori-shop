@@ -68,7 +68,7 @@ const ItemDetailPage: React.FC = () => {
     const fetchItemDetails = async (id: number): Promise<Item> => {
         try {
             console.log(`Fetching item details for id: ${id}`);
-            const response = await axios.get(`http://localhost:8000/api/items/${id}/info/`);
+            const response = await axios.get(`http://localhost:9100/api/items/${id}/info/`);
             console.log('Received data:', response.data);
             return response.data;
         } catch (error) {
@@ -126,7 +126,7 @@ const ItemDetailPage: React.FC = () => {
     const handleAddToCart = async () => {
         if (selectedColor && selectedSize && item) {
             try {
-                await axios.post('http://localhost:8000/api/items/add_to_cart/', {
+                await axios.post('http://localhost:9100/api/items/add_to_cart/', {
                     quantity,
                     option: {
                         item_no: item.id,
@@ -147,7 +147,7 @@ const ItemDetailPage: React.FC = () => {
     const handleOrderDirect = async () => {
         if (selectedColor && selectedSize && item) {
             try {
-                await axios.post('http://localhost:8000/api/orders/order_direct/', {
+                await axios.post('http://localhost:9100/api/orders/order_direct/', {
                     item_id: item.id,
                     option_id: selectedOption?.id,
                     quantity,

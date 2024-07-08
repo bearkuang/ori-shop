@@ -44,7 +44,7 @@ const LikedProducts: React.FC = () => {
         const fetchItems = async () => {
             setIsLoading(true);
             try {
-                const response = await axios.get('http://localhost:8000/api/items/liked_items/', {
+                const response = await axios.get('http://localhost:9100/api/items/liked_items/', {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }

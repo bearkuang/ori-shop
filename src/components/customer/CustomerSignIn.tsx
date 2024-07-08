@@ -24,8 +24,8 @@ const CustomerSignIn: React.FC = () => {
         e.preventDefault();
         try {
             const endpoint = isCustomer
-                ? 'http://localhost:8000/api/auth/login/'
-                : 'http://localhost:8000/api/auth/company-login/';
+                ? 'http://localhost:9100/api/auth/login/'
+                : 'http://localhost:9100/api/auth/company-login/';
     
             const response = await axios.post(endpoint, formData);
             console.log('Login successful', response.data);

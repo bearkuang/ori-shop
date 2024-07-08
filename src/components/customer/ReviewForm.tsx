@@ -17,7 +17,7 @@ const ReviewForm: React.FC<{ productId: number, onClose: () => void, onReviewSub
         }
 
         try {
-            await axios.post('http://localhost:8000/api/reviews/create_review/', formData, {
+            await axios.post('http://localhost:9100/api/reviews/create_review/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
