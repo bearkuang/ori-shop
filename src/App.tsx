@@ -13,6 +13,7 @@ import CompanyPage from './components/company/CompanyPage';
 import ProtectedAdminRoute from './context/ProtectedAdminRoute';
 import ManagerMain from './components/manager/ManagerMain';
 import ManaerSignIn from './components/manager/ManagerSingIn';
+import CompanySignUp from './components/company/CompanySignUp';
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const App: React.FC = () => {
             <Route path="/category" element={<CategorizedItemPage />} />
             <Route path="/signup" element={<CustomerSignUp />} />
             <Route path="/signin" element={<CustomerSignIn />} />
+            <Route path="/company-signup" element={<CompanySignUp />} />
             <Route path="/item/:itemId/info" element={<ItemDetailPage />} />
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/companypage" element={<CompanyPage />} />

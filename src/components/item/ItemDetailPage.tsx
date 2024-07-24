@@ -55,6 +55,16 @@ interface Item {
     average_rating: number;
 }
 
+const colorMap: { [key: string]: string } = {
+    'Sky Blue': '#87CEEB',
+    'Denim': '#1560BD',
+    'White': '#FFFFFF',
+};
+
+const colorImageMap: { [key: string]: string } = {
+    'Flower': '/color/flower.png',
+};
+
 const ItemDetailPage: React.FC = () => {
     const { itemId } = useParams<{ itemId: string }>();
     const [item, setItem] = useState<Item | null>(null);
@@ -64,11 +74,28 @@ const ItemDetailPage: React.FC = () => {
     const [selectedSize, setSelectedSize] = useState('');
     const [quantity, setQuantity] = useState(1);
     const navigate = useNavigate();
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    const handlePrevImage = () => {
+        if (item && item.images.length > 0) {
+            setCurrentImageIndex((prevIndex) =>
+                prevIndex === 0 ? item.images.length - 1 : prevIndex - 1
+            );
+        }
+    };
+
+    const handleNextImage = () => {
+        if (item && item.images.length > 0) {
+            setCurrentImageIndex((prevIndex) =>
+                (prevIndex + 1) % item.images.length
+            );
+        }
+    };
 
     const fetchItemDetails = async (id: number): Promise<Item> => {
         try {
             console.log(`Fetching item details for id: ${id}`);
-            const response = await axios.get(`http://localhost:9100/api/items/${id}/info/`);
+            const response = await axios.get(`http://localhost:8000/api/items/${id}/info/`);
             console.log('Received data:', response.data);
             return response.data;
         } catch (error) {
@@ -126,7 +153,7 @@ const ItemDetailPage: React.FC = () => {
     const handleAddToCart = async () => {
         if (selectedColor && selectedSize && item) {
             try {
-                await axios.post('http://localhost:9100/api/items/add_to_cart/', {
+                await axios.post('http://localhost:8000/api/items/add_to_cart/', {
                     quantity,
                     option: {
                         item_no: item.id,
@@ -147,7 +174,7 @@ const ItemDetailPage: React.FC = () => {
     const handleOrderDirect = async () => {
         if (selectedColor && selectedSize && item) {
             try {
-                await axios.post('http://localhost:9100/api/orders/order_direct/', {
+                await axios.post('http://localhost:8000/api/orders/order_direct/', {
                     item_id: item.id,
                     option_id: selectedOption?.id,
                     quantity,
@@ -191,7 +218,39 @@ const ItemDetailPage: React.FC = () => {
                                 {/* 상품 이미지 */}
                                 <div className='flex flex-col gap-[8px] items-start grow shrink-0 basis-0 bg-[#fcf7f7] rounded-[12px] relative overflow-hidden z-[34]'>
                                     <div className='flex h-[557px] gap-[8px] items-start self-stretch shrink-0 flex-nowrap relative z-[35]'>
-                                        <img src={item.images[0]?.file} alt={item.item_name} className='w-full h-full object-contain' />
+                                        {item.images.length > 0 && (
+                                            <>
+                                                <img
+                                                    src={item.images[currentImageIndex].file}
+                                                    alt={`${item.item_name} - ${currentImageIndex + 1}`}
+                                                    className='w-full h-full object-contain'
+                                                />
+                                                {item.images.length > 1 && (
+                                                    <>
+                                                        <button
+                                                            onClick={handlePrevImage}
+                                                            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition"
+                                                        >
+                                                            &#8249;
+                                                        </button>
+                                                        <button
+                                                            onClick={handleNextImage}
+                                                            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-75 transition"
+                                                        >
+                                                            &#8250;
+                                                        </button>
+                                                        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                                                            {item.images.map((_, index) => (
+                                                                <div
+                                                                    key={index}
+                                                                    className={`w-2 h-2 rounded-full ${index === currentImageIndex ? 'bg-white' : 'bg-gray-400'}`}
+                                                                ></div>
+                                                            ))}
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </>
+                                        )}
                                     </div>
                                 </div>
                                 {/* 상품 정보 */}
@@ -212,7 +271,10 @@ const ItemDetailPage: React.FC = () => {
                                                 {/* 상품 색상 정보 */}
                                                 <div className='flex pt-[16px] pr-[16px] pb-[16px] pl-[16px] gap-[20px] items-start self-stretch shrink-0 flex-wrap relative z-[73]'>
                                                     {Array.from(new Set(item.options.map((option) => option.opt_color))).map((color, index) => (
-                                                        <div key={index} className='flex w-[40px] h-[40px] flex-col items-start flex-nowrap rounded-[20px] border-solid border border-[#e8d1ce] relative z-[74]' style={{ backgroundColor: color }} />
+                                                        <div key={index} className='flex w-[40px] h-[40px] flex-col items-start flex-nowrap rounded-[20px] border-solid border border-[#e8d1ce] relative z-[74]' style={{ 
+                                                            backgroundColor: colorMap[color] || color,
+                                                            backgroundImage: colorImageMap[color] ? `url(${colorImageMap[color]})` : 'none'
+                                                        }}  />
                                                     ))}
                                                 </div>
                                             </div>

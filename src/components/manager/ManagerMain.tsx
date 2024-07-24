@@ -118,7 +118,7 @@ const ManagerMain: React.FC = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:9100/api/managers/pending_companies/', {
+            const response = await axios.get('http://localhost:8000/api/managers/pending_companies/', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -132,7 +132,7 @@ const ManagerMain: React.FC = () => {
     const fetchLoginData = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get('http://localhost:9100/api/managers/daily_unique_logins/', {
+            const response = await axios.get('http://localhost:8000/api/managers/daily_unique_logins/', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -170,7 +170,7 @@ const ManagerMain: React.FC = () => {
     const handleApprove = async (companyId: number) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`http://localhost:9100/api/managers/${companyId}/approve_company/`, {}, {
+            await axios.post(`http://localhost:8000/api/managers/${companyId}/approve_company/`, {}, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

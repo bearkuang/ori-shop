@@ -30,7 +30,7 @@ const ProductReviews: React.FC = () => {
         const fetchReviews = async () => {
             setIsLoading(true);
             try {
-                const response = await axios.get('http://localhost:9100/api/reviews/my_reviews/', {
+                const response = await axios.get('http://localhost:8000/api/reviews/my_reviews/', {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
@@ -44,7 +44,7 @@ const ProductReviews: React.FC = () => {
                         .filter((value, index, self) => self.indexOf(value) === index);
                     // 각 상품 정보 가져오기
                     const itemPromises = itemIds.map(id =>
-                        axios.get(`http://localhost:9100/api/items/${id}/info/`, {
+                        axios.get(`http://localhost:8000/api/items/${id}/info/`, {
                             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
                         })
                     );

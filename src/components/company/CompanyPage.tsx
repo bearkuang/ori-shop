@@ -69,7 +69,9 @@ const CompanyPage: React.FC = () => {
                         </div>
                         <div className='flex h-[700px] flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[28]'>
                             {showAddProduct ? (
-                                <AddProduct />
+                                <div className="w-full pl-4 h-full overflow-y-auto">
+                                    <AddProduct />
+                                </div>
                             ) : showOrderList ? (
                                 <OrderList />
                             ) : (

@@ -24,7 +24,7 @@ const PendingItemsPage: React.FC = () => {
         const fetchCompaniesWithPendingItems = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:9100/api/managers/companies_with_pending_items/', {
+                const response = await axios.get('http://localhost:8000/api/managers/companies_with_pending_items/', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -43,13 +43,13 @@ const PendingItemsPage: React.FC = () => {
     const handleApproveItem = async (itemId: number) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`http://localhost:9100/api/managers/${itemId}/approve_item/`, {}, {
+            await axios.post(`http://localhost:8000/api/managers/${itemId}/approve_item/`, {}, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
             // 승인 후 목록 다시 불러오기
-            const response = await axios.get('http://localhost:9100/api/managers/companies_with_pending_items/', {
+            const response = await axios.get('http://localhost:8000/api/managers/companies_with_pending_items/', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

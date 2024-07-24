@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { FaUser, FaLock, FaArrowRight, FaTimes } from 'react-icons/fa';
 
 const CustomerSignIn: React.FC = () => {
     const [formData, setFormData] = useState({
@@ -12,6 +13,8 @@ const CustomerSignIn: React.FC = () => {
     const [isCustomer, setIsCustomer] = useState(true);
     const navigate = useNavigate();
     const { login } = useAuth();
+    const [showModal, setShowModal] = useState(false);
+    const [companyCode, setCompanyCode] = useState('');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -24,17 +27,17 @@ const CustomerSignIn: React.FC = () => {
         e.preventDefault();
         try {
             const endpoint = isCustomer
-                ? 'http://localhost:9100/api/auth/login/'
-                : 'http://localhost:9100/api/auth/company-login/';
-    
+                ? 'http://localhost:8000/api/auth/login/'
+                : 'http://localhost:8000/api/auth/company-login/';
+
             const response = await axios.post(endpoint, formData);
             console.log('Login successful', response.data);
-            
+
             // 로그인 상태 업데이트
             // userType을 isCustomer 상태에 따라 결정
             const userType = isCustomer ? 'customer' : 'company';
             login(response.data.access, userType);
-            
+
             // 로그인 성공 후 메인 페이지로 리다이렉트
             navigate('/');
         } catch (error) {
@@ -46,94 +49,137 @@ const CustomerSignIn: React.FC = () => {
         }
     };
 
+    const handleCompanySignUp = () => {
+        setShowModal(true);
+    };
+
+    const checkCompanyCode = () => {
+        const correctCode = "DORIRLDJQCODE12#";
+
+        if (companyCode === correctCode) {
+            setShowModal(false);
+            setCompanyCode('');
+            navigate('/company-signup');
+        } else {
+            alert("잘못된 코드입니다. 다시 시도해주세요.");
+        }
+    };
+
     return (
         <div className='main-container flex w-[1280px] flex-col items-start flex-nowrap bg-[#fff] relative mx-auto my-0'>
             <div className='flex flex-col items-start self-stretch shrink-0 flex-nowrap bg-[#fff] relative overflow-hidden'>
                 <div className='flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[1]'>
                     <div className='w-full flex justify-center mb-8 mt-8'>
                         <img
-                            src="https://i.ibb.co/2ZVYy4z/dori-login-design.webp"
+                            src="/images/dori-login-design.png"
                             alt="D'ori Login"
                             className="w-[960px] h-auto rounded-[12px]"
                         />
                     </div>
                     <div className='flex h-[757px] pt-[20px] pr-[160px] pb-[20px] pl-[160px] justify-center items-start self-stretch shrink-0 flex-nowrap relative z-[25]'>
                         <div className='flex w-[960px] pt-[20px] pr-0 pb-[20px] pl-0 flex-col items-start shrink-0 flex-nowrap relative overflow-hidden z-[26]'>
-                            <form onSubmit={handleSubmit} className='flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[27]'>
-                                {/* 토글 버튼 추가 */}
-                                <div className='flex w-full justify-start mb-4'>
+                            <form onSubmit={handleSubmit} className='flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[27] w-full max-w-md mx-auto'>
+                                <div className='flex w-full justify-center mb-6'>
                                     <button
                                         onClick={() => setIsCustomer(true)}
-                                        className={`px-4 py-2 mr-2 rounded ${isCustomer ? 'bg-[#f46047] text-white' : 'bg-gray-200'}`}
+                                        className={`px-6 py-2 mr-2 rounded-full transition-all duration-300 ${isCustomer ? 'bg-[#f46047] text-white shadow-md' : 'bg-gray-200 text-gray-700'}`}
                                     >
                                         고객 로그인
                                     </button>
                                     <button
                                         onClick={() => setIsCustomer(false)}
-                                        className={`px-4 py-2 rounded ${!isCustomer ? 'bg-[#f46047] text-white' : 'bg-gray-200'}`}
+                                        className={`px-6 py-2 rounded-full transition-all duration-300 ${!isCustomer ? 'bg-[#f46047] text-white shadow-md' : 'bg-gray-200 text-gray-700'}`}
                                     >
                                         기업 로그인
                                     </button>
                                 </div>
-                                <div className='flex w-[480px] pt-[12px] pr-[16px] pb-[12px] pl-[16px] gap-[16px] items-end grow shrink-0 basis-0 flex-wrap relative z-30'>
-                                    <div className='flex flex-col items-start grow basis-0 flex-nowrap relative z-[31]'>
-                                        <div className='flex pt-0 pr-0 pb-[8px] pl-0 flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[32]'>
-                                            <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-medium leading-[24px] text-[#161111] relative text-left whitespace-nowrap z-[33]">
-                                                Username
-                                            </span>
-                                        </div>
-                                        <div className='flex h-[56px] pt-[15px] pr-[15px] pb-[15px] pl-[15px] items-center self-stretch shrink-0 flex-nowrap bg-[#fff] rounded-[12px] border-solid border border-[#e5dddb] relative overflow-hidden z-[34]'>
-                                            <input
-                                                type="text"
-                                                name="username"
-                                                value={formData.username}
-                                                onChange={handleChange}
-                                                className="w-full h-full border-none outline-none font-['Epilogue'] text-[16px] text-[#896660]"
-                                                placeholder="Enter your username"
-                                            />
-                                        </div>
+                                <div className='w-full space-y-6'>
+                                    <div className='relative'>
+                                        <FaUser className='absolute top-3 left-3 text-gray-400' />
+                                        <input
+                                            type="text"
+                                            name="username"
+                                            value={formData.username}
+                                            onChange={handleChange}
+                                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f46047] transition duration-300"
+                                            placeholder="Username"
+                                        />
                                     </div>
-                                </div>
-                                <div className='flex w-[480px] pt-[12px] pr-[16px] pb-[12px] pl-[16px] gap-[16px] items-end grow shrink-0 basis-0 flex-wrap relative z-[36]'>
-                                    <div className='flex flex-col items-start grow basis-0 flex-nowrap relative z-[37]'>
-                                        <div className='flex pt-0 pr-0 pb-[8px] pl-0 flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[38]'>
-                                            <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-medium leading-[24px] text-[#161111] relative text-left whitespace-nowrap z-[39]">
-                                                Password
-                                            </span>
-                                        </div>
-                                        <div className='flex h-[56px] pt-[15px] pr-[15px] pb-[15px] pl-[15px] items-center self-stretch shrink-0 flex-nowrap bg-[#fff] rounded-[12px] border-solid border border-[#e5dddb] relative overflow-hidden z-40'>
-                                            <input
-                                                type="password"
-                                                name="password"
-                                                value={formData.password}
-                                                onChange={handleChange}
-                                                className="w-full h-full border-none outline-none font-['Epilogue'] text-[16px] text-[#896660]"
-                                                placeholder="Enter your password"
-                                            />
-                                        </div>
+                                    <div className='relative'>
+                                        <FaLock className='absolute top-3 left-3 text-gray-400' />
+                                        <input
+                                            type="password"
+                                            name="password"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f46047] transition duration-300"
+                                            placeholder="Password"
+                                        />
                                     </div>
-                                </div>
-                                {error && (
-                                    <div className='flex pt-[4px] pr-[16px] pb-[12px] pl-[16px] flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[42]'>
-                                        <span className="h-[21px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[14px] font-normal leading-[21px] text-red-500 relative text-left whitespace-nowrap z-[43]">
+
+                                    {error && (
+                                        <div className='text-red-500 text-sm'>
                                             {error}
-                                        </span>
+                                        </div>
+                                    )}
+
+                                    <div className='text-right'>
+                                        <a href="#" className="text-sm text-[#f46047] hover:underline">
+                                            Forgot Password?
+                                        </a>
                                     </div>
-                                )}
-                                <div className='flex pt-[4px] pr-[16px] pb-[12px] pl-[16px] flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[42]'>
-                                    <span className="h-[21px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[14px] font-normal leading-[21px] text-[#896660] relative text-left whitespace-nowrap z-[43] cursor-pointer">
-                                        Forgot Password?
-                                    </span>
-                                </div>
-                                <div className='flex pt-[12px] pr-[16px] pb-[12px] pl-[16px] items-start self-stretch shrink-0 flex-nowrap relative z-[44]'>
+
                                     <button
                                         type="submit"
-                                        className='flex w-[446px] h-[48px] justify-center items-center shrink-0 flex-nowrap bg-[#f46047] rounded-[24px] relative overflow-hidden z-[45]'
+                                        className='w-full py-2 px-4 bg-[#f46047] text-white rounded-lg hover:bg-[#e35037] transition duration-300 flex items-center justify-center'
                                     >
-                                        <span className="font-['Epilogue'] text-[16px] font-bold leading-[24px] text-[#fff] text-center z-[47]">
-                                            Login
-                                        </span>
+                                        <span className="mr-2">Login</span>
+                                        <FaArrowRight />
                                     </button>
+                                    {/* 회원가입 버튼 추가 */}
+                                    <div className="mt-4 text-center">
+                                        <div className='flex space-x-4'>
+                                            <span className="text-gray-600">아직 계정이 없으신가요?</span>
+                                            <button
+                                                onClick={() => navigate('/signup')}
+                                                className="ml-2 text-[#f46047] hover:underline font-semibold"
+                                            >
+                                                일반 회원가입
+                                            </button>
+                                            <button
+                                                onClick={handleCompanySignUp}
+                                                className="ml-2 text-[#f46047] hover:underline font-semibold"
+                                            >
+                                                기업 회원가입
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {/* 모달 컴포넌트 */}
+                                    {showModal && (
+                                        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
+                                            <div className="bg-white p-5 rounded-lg shadow-lg w-96">
+                                                <div className="flex justify-between items-center mb-4">
+                                                    <h3 className="text-xl font-bold">기업 코드 입력</h3>
+                                                    <button onClick={() => setShowModal(false)} className="text-gray-500 hover:text-gray-700">
+                                                        <FaTimes />
+                                                    </button>
+                                                </div>
+                                                <input
+                                                    type="text"
+                                                    value={companyCode}
+                                                    onChange={(e) => setCompanyCode(e.target.value)}
+                                                    placeholder="기업 코드를 입력하세요"
+                                                    className="w-full p-2 border border-gray-300 rounded mb-4"
+                                                />
+                                                <button
+                                                    onClick={checkCompanyCode}
+                                                    className="w-full bg-[#f46047] text-white py-2 rounded hover:bg-[#e35037] transition duration-300"
+                                                >
+                                                    확인
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
                             </form>
                         </div>

@@ -52,12 +52,12 @@ const Header: React.FC = () => {
                     </div>
                     <div className='flex gap-3 items-start shrink-0 flex-nowrap relative'>
                         <div className='flex flex-col items-center grow shrink-0 flex-nowrap relative'>
-                            <img src="https://i.ibb.co/VQM6YLp/smart-cart.png" alt="Cart" className="w-10 h-10 rounded-full" />
+                            <img src="/images/smart-cart.png" alt="Cart" className="w-10 h-10 rounded-full" />
                         </div>
                         {isAuthenticated ? (
                             <div className='flex flex-col items-center grow shrink-0 flex-nowrap relative cursor-pointer' onClick={handleMypage}>
                                 <img
-                                    src={isCompany ? "https://i.ibb.co/QXhPdy3/icon-office.png" : "https://i.ibb.co/tB6CY38/user-icon.png"}
+                                    src={isCompany ? "/images/icon-office.png" : "/images/user-icon.png"}
                                     alt={isCompany ? "Company Page" : "Profile Edit"}
                                     className="w-10 h-10 rounded-full"
                                 />

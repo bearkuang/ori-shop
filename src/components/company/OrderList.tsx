@@ -73,7 +73,7 @@ const OrderList: React.FC = () => {
         const fetchOrders = async () => {
             setIsLoading(true);
             try {
-                const response = await axios.get('http://localhost:9100/api/companies/company_orders/', {
+                const response = await axios.get('http://localhost:8000/api/companies/company_orders/', {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
@@ -98,7 +98,7 @@ const OrderList: React.FC = () => {
     const updateDeliveryStatus = async (productId: number, newStatus: string) => {
         try {
             const response = await axios.post(
-                `http://localhost:9100/api/companies/${productId}/update_delivery_status/`,
+                `http://localhost:8000/api/companies/${productId}/update_delivery_status/`,
                 { delivery_status: newStatus },
                 {
                     headers: {

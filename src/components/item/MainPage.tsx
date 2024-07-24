@@ -23,7 +23,7 @@ const MainPage: React.FC = () => {
   useEffect(() => {
     const fetchPopularItems = async () => {
       try {
-        const response = await axios.get('http://localhost:9100/api/items/popular/');
+        const response = await axios.get('http://localhost:8000/api/items/popular/');
         setPopularItems(response.data);
       } catch (error) {
         console.error('Error fetching popular items', error);
@@ -32,7 +32,7 @@ const MainPage: React.FC = () => {
 
     const fetchNewItems = async () => {
       try {
-        const response = await axios.get('http://localhost:9100/api/items/newest/');
+        const response = await axios.get('http://localhost:8000/api/items/newest/');
         setNewItems(response.data);
       } catch (error) {
         console.error('Error fetching new items', error);
@@ -55,7 +55,10 @@ const MainPage: React.FC = () => {
             <div className="flex flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[26]">
               <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[27]">
                 <div className="flex pt-[16px] pr-[16px] pb-[16px] pl-[16px] flex-col items-start self-stretch grow shrink-0 basis-0 flex-nowrap relative z-[28]">
-                  <div className="h-[480px] self-stretch shrink-0 bg-cover bg-no-repeat rounded-[12px] relative overflow-hidden z-[29]" style={{ backgroundImage: 'url("https://i.ibb.co/10Mvfky/d-ori-banner.png")' }}>
+                  <div
+                    className="h-[480px] self-stretch shrink-0 bg-cover bg-no-repeat rounded-[12px] relative overflow-hidden z-[29]"
+                    style={{ backgroundImage: 'url("/images/dori-banner.png")' }}
+                  >
                     <div className="flex w-[645px] flex-col gap-[8px] items-start flex-nowrap relative z-30 mt-[284px] mr-0 mb-0 ml-[56px]">
                       <div className="flex w-[645px] flex-col items-start shrink-0 flex-nowrap relative z-[31]">
                         <span className="h-[60px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[48px] font-bold leading-[60px] text-[#fff] tracking-[-2px] relative text-left whitespace-nowrap z-[32]">
@@ -81,7 +84,7 @@ const MainPage: React.FC = () => {
               </div>
               <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[38]">
                 <div className="flex w-[960px] h-[359px] pt-[40px] pr-[16px] pb-[40px] pl-[16px] gap-[32px] items-start shrink-0 flex-nowrap relative z-[39]">
-                  <div className="h-[279px] grow shrink-0 basis-0 bg-cover bg-no-repeat rounded-[12px] relative overflow-hidden z-40" style={{ backgroundImage: 'url("https://i.ibb.co/G5HcKk2/dori-middle-banner.png")' }} />
+                  <div className="h-[279px] grow shrink-0 basis-0 bg-cover bg-no-repeat rounded-[12px] relative overflow-hidden z-40" style={{ backgroundImage: 'url("/images/dori-middle-banner.png")' }} />
                   <div className="flex w-[400px] h-[279px] flex-col gap-[32px] justify-center items-start shrink-0 flex-nowrap relative z-[41]">
                     <div className="flex w-[400px] flex-col items-center shrink-0 flex-nowrap relative z-[42]">
                       <span className="h-[60px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[48px] font-bold leading-[60px] text-[#1c0f0c] tracking-[-2px] relative text-center whitespace-nowrap z-[43]">
