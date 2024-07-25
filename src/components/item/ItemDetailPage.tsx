@@ -59,10 +59,12 @@ const colorMap: { [key: string]: string } = {
     'Sky Blue': '#87CEEB',
     'Denim': '#1560BD',
     'White': '#FFFFFF',
+    'Yellow': '#F4FA58',
 };
 
 const colorImageMap: { [key: string]: string } = {
     'Flower': '/color/flower.png',
+    'Pink-White': '/color/Pink-White.png'
 };
 
 const ItemDetailPage: React.FC = () => {

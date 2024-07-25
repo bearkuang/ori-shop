@@ -3,26 +3,37 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import AddProduct from './AddProduct';
 import OrderList from './OrderList';
+import AddedProduct from './AddedProduct';
 
 const CompanyPage: React.FC = () => {
     const navigate = useNavigate();
     const { isAuthenticated, logout } = useAuth();
     const [showAddProduct, setShowAddProduct] = useState(false);
     const [showOrderList, setShowOderList] = useState(false);
+    const [showAddedProduct, setShowAddedProduct] = useState(false);
+
+    const toggleAddedProduct = () => {
+        setShowAddedProduct(true);
+        setShowAddProduct(false);
+        setShowOderList(false);
+    }
 
     const toggleAddProduct = () => {
         setShowAddProduct(true);
         setShowOderList(false);
+        setShowAddedProduct(false);
     }
 
     const toggleOrderList = () => {
         setShowOderList(true);
         setShowAddProduct(false);
+        setShowAddedProduct(false);
     }
 
     const toggleCompanyPage = () => {
         setShowAddProduct(false);
         setShowOderList(false);
+        setShowAddedProduct(false);
     }
 
     return (
@@ -74,6 +85,8 @@ const CompanyPage: React.FC = () => {
                                 </div>
                             ) : showOrderList ? (
                                 <OrderList />
+                            ) : showAddedProduct ? (
+                                <AddedProduct />
                             ) : (
                                 <>
                                     <div className='flex pt-[20px] pr-[16px] pb-[12px] pl-[16px] flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[29]'>
@@ -122,7 +135,10 @@ const CompanyPage: React.FC = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='flex h-[56px] pt-0 pr-[16px] pb-0 pl-[16px] justify-between items-center self-stretch shrink-0 flex-nowrap bg-[#fff] relative z-[54] cursor-pointer'>
+                                    <div
+                                        className='flex h-[56px] pt-0 pr-[16px] pb-0 pl-[16px] justify-between items-center self-stretch shrink-0 flex-nowrap bg-[#fff] relative z-[54] cursor-pointer'
+                                        onClick={toggleAddedProduct}
+                                    >
                                         <div className='flex flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[55]'>
                                             <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#1c0f0c] relative text-left overflow-hidden whitespace-nowrap z-[56]">
                                                 Added Product

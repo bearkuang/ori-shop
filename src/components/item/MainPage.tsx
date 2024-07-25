@@ -18,6 +18,7 @@ interface Item {
 const MainPage: React.FC = () => {
   const [popularItems, setPopularItems] = useState<Item[]>([]);
   const [newItems, setNewItems] = useState<Item[]>([]);
+  const [currentImageIndexes, setCurrentImageIndexes] = useState<{ [key: number]: number }>({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,6 +43,28 @@ const MainPage: React.FC = () => {
     fetchPopularItems();
     fetchNewItems();
   }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentImageIndexes(prevIndexes => {
+        const newIndexes = { ...prevIndexes };
+        [...popularItems, ...newItems].forEach(item => {
+          if (item.images.length > 1) {
+            newIndexes[item.id] = (newIndexes[item.id] + 1) % item.images.length || 0;
+          }
+        });
+        return newIndexes;
+      });
+    }, 3000); // 3초마다 이미지 변경
+
+    return () => clearInterval(intervalId);
+  }, [popularItems, newItems]);
+
+  const getItemImage = (item: Item) => {
+    if (item.images.length === 0) return '';
+    const currentIndex = currentImageIndexes[item.id] || 0;
+    return item.images[currentIndex]?.file || item.images[0]?.file;
+  };
 
   const handleShowItems = () => {
     navigate("/category");
@@ -108,8 +131,8 @@ const MainPage: React.FC = () => {
                       className="flex w-[223px] pt-0 pr-0 pb-[12px] pl-0 flex-col gap-[12px] items-start self-stretch shrink-0 flex-nowrap relative z-[55] cursor-pointer"
                     >
                       <div
-                        className="h-[297px] self-stretch shrink-0 bg-cover bg-no-repeat rounded-[12px] relative overflow-hidden z-[56]"
-                        style={{ backgroundImage: `url(${item.images[0]?.file})` }}
+                        className="h-[297px] self-stretch shrink-0 bg-cover bg-no-repeat rounded-[12px] relative overflow-hidden z-[56] transition-all duration-500 ease-in-out"
+                        style={{ backgroundImage: `url(${getItemImage(item)})` }}
                       />
                       <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[57]">
                         <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[58]">

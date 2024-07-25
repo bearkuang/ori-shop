@@ -79,7 +79,7 @@ const AddProduct: React.FC = () => {
 
         // 누락된 필드 추가
         data.append('item_soldout', 'N');  // 기본값 설정
-        data.append('item_is_display', 'Y');  // 기본값 설정
+        data.append('item_is_display', 'N');  // 기본값 설정
 
         // 옵션 데이터 추가
         data.append('options', JSON.stringify(formData.options));
