@@ -36,6 +36,10 @@ const CompanyPage: React.FC = () => {
         setShowAddedProduct(false);
     }
 
+    const onProductAdded = () => {
+        toggleAddedProduct();
+    }
+
     return (
         <div className='main-container flex w-[1280px] flex-col items-start flex-nowrap bg-[#fff] relative mx-auto my-0'>
             <div className='flex flex-col items-start self-stretch shrink-0 flex-nowrap bg-[#fff] relative overflow-hidden'>
@@ -81,7 +85,7 @@ const CompanyPage: React.FC = () => {
                         <div className='flex h-[700px] flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[28]'>
                             {showAddProduct ? (
                                 <div className="w-full pl-4 h-full overflow-y-auto">
-                                    <AddProduct />
+                                    <AddProduct onProductAdded={onProductAdded} />
                                 </div>
                             ) : showOrderList ? (
                                 <OrderList />
@@ -156,20 +160,6 @@ const CompanyPage: React.FC = () => {
                                         <span className="h-[28px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[22px] font-bold leading-[28px] text-[#1c0f0c] relative text-left whitespace-nowrap z-[69]">
                                             My Information
                                         </span>
-                                    </div>
-                                    <div className='flex h-[56px] pt-0 pr-[16px] pb-0 pl-[16px] justify-between items-center self-stretch shrink-0 flex-nowrap bg-[#fff] relative z-[70]'>
-                                        <div className='flex flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[71]'>
-                                            <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#1c0f0c] relative text-left overflow-hidden whitespace-nowrap z-[72]">
-                                                Account Management
-                                            </span>
-                                        </div>
-                                        <div className='flex w-[28px] flex-col items-start shrink-0 flex-nowrap relative z-[73]'>
-                                            <div className='flex w-[28px] justify-center items-center grow shrink-0 basis-0 flex-nowrap relative z-[74]'>
-                                                <div className='w-[24px] h-[24px] shrink-0 relative overflow-hidden z-[75]'>
-                                                    <div className='w-[24px] h-[24px] bg-cover bg-no-repeat absolute top-0 left-0 z-[76]' />
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                     <div className='flex h-[56px] pt-0 pr-[16px] pb-0 pl-[16px] justify-between items-center self-stretch shrink-0 flex-nowrap bg-[#fff] relative z-[77]'>
                                         <div className='flex flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[78]'>

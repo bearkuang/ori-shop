@@ -57,6 +57,8 @@ const CustomerSignUp: React.FC = () => {
         address: '',
         email: ''
     });
+    const [address, setAddress] = useState('');
+    const [postcode, setPostcode] = useState('');
 
     const navigate = useNavigate();
 
@@ -156,7 +158,7 @@ const CustomerSignUp: React.FC = () => {
             console.log(response.data);
             alert('Sign up successful!');
             // 회원가입 성공 후 리다이렉션 또는 알림
-            navigate('/login');
+            navigate('/signin');
         } catch (error) {
             console.error('Sign up failed', error);
             alert('이미 가입된 아이디 혹은 이메일입니다. 확인 후 다시 시도해주세요.');
@@ -179,6 +181,32 @@ const CustomerSignUp: React.FC = () => {
                 setErrors(error.response.data);
             }
         }
+    };
+
+    const openPostcodeSearch = () => {
+        new (window as any).daum.Postcode({
+            oncomplete: function (data: any) {
+                let fullAddress = data.address;
+                let extraAddress = '';
+
+                if (data.addressType === 'R') {
+                    if (data.bname !== '') {
+                        extraAddress += data.bname;
+                    }
+                    if (data.buildingName !== '') {
+                        extraAddress += (extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName);
+                    }
+                    fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '');
+                }
+
+                setPostcode(data.zonecode);
+                setAddress(fullAddress);
+                setFormData(prev => ({
+                    ...prev,
+                    address: `(${data.zonecode}) ${fullAddress}`
+                }));
+            }
+        }).open();
     };
 
     return (
@@ -258,13 +286,34 @@ const CustomerSignUp: React.FC = () => {
                                     value={formData.confirm_password}
                                     onChange={handleChange}
                                 />
-                                <InputField
-                                    icon={<FaAddressCard className="text-gray-400" />}
-                                    name="address"
-                                    placeholder="Enter your address"
-                                    value={formData.address}
-                                    onChange={handleChange}
-                                />
+                                <div className="flex flex-col space-y-2">
+                                    <label htmlFor="address" className="font-medium text-[#161111]">Address</label>
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            id="postcode"
+                                            value={postcode}
+                                            placeholder="Postcode"
+                                            readOnly
+                                            className="w-1/3 h-[56px] pl-3 rounded-[12px] border border-[#e5dbdb] focus:outline-none focus:ring-2 focus:ring-[#f46b5b] transition-all duration-300"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={openPostcodeSearch}
+                                            className="bg-[#f46b5b] h-[56px] px-4 text-white rounded-[12px] transition-all duration-300 hover:bg-[#e35a4a]"
+                                        >
+                                            Search Address
+                                        </button>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        id="address"
+                                        value={address}
+                                        placeholder="Address"
+                                        readOnly
+                                        className="w-full h-[56px] pl-3 rounded-[12px] border border-[#e5dbdb] focus:outline-none focus:ring-2 focus:ring-[#f46b5b] transition-all duration-300"
+                                    />
+                                </div>
                                 <InputField
                                     icon={<FaBirthdayCake className="text-gray-400" />}
                                     name="birthday"

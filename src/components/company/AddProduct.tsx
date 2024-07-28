@@ -1,28 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+interface AddProductProps {
+    onProductAdded: () => void;
+}
+
+interface Category {
+    id: number;
+    main_cate_name: string;
+    cate_name: string;
+}
+
 interface FormData {
-    cate_no: string;
+    cate_no: number;
     item_name: string;
     item_description: string;
-    item_price: string;
+    item_price: number;
     images: File[];
     options: { opt_color: string; opt_size: string; opt_stock: number; }[];
 }
 
-const AddProduct: React.FC = () => {
+const AddProduct: React.FC<AddProductProps> = ({ onProductAdded }) => {
     const [formData, setFormData] = useState<FormData>({
-        cate_no: '',
+        cate_no: 0,
         item_name: '',
         item_description: '',
-        item_price: '',
+        item_price: 0,
         images: [],
         options: [{ opt_color: '', opt_size: '', opt_stock: 0 }],
     });
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const navigate = useNavigate();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [categories, setCategories] = useState<Category[]>([]);
 
     const handlePrevImage = () => {
         setCurrentImageIndex((prevIndex) =>
@@ -36,8 +47,12 @@ const AddProduct: React.FC = () => {
         );
     };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        const { name, value } = e.target;
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: name === 'cate_no' ? parseInt(value, 10) : value
+        }));
     };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,10 +87,10 @@ const AddProduct: React.FC = () => {
         const data = new FormData();
 
         // 기본 필드 추가
-        data.append('cate_no', formData.cate_no);
+        data.append('cate_no', formData.cate_no.toString());
         data.append('item_name', formData.item_name);
         data.append('item_description', formData.item_description);
-        data.append('item_price', formData.item_price);
+        data.append('item_price', formData.item_price.toString());
 
         // 누락된 필드 추가
         data.append('item_soldout', 'N');  // 기본값 설정
@@ -97,11 +112,25 @@ const AddProduct: React.FC = () => {
                 },
             });
             console.log('Product added successfully:', response.data);
-            navigate("/companypage")
+            onProductAdded();
         } catch (error) {
             console.error('Error adding product:', error);
         }
     };
+
+    useEffect(() => {
+        // 카테고리 데이터 가져오기
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get('http://localhost:8000/api/categories/');
+                setCategories(response.data);
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
     return (
         <div className='main-container flex w-full h-full flex-col items-start flex-nowrap bg-[#fff] relative mx-auto my-0 overflow-y-auto'>
@@ -255,16 +284,21 @@ const AddProduct: React.FC = () => {
                                         {/* 카테고리 입력 */}
                                         <div className='space-y-2'>
                                             <label htmlFor="cate_no" className="block text-lg font-semibold text-gray-700">Category</label>
-                                            <input
-                                                type="number"
+                                            <select
                                                 id="cate_no"
                                                 name="cate_no"
-                                                value={formData.cate_no}
+                                                value={formData.cate_no.toString()}
                                                 onChange={handleInputChange}
                                                 className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                                placeholder="Enter category number"
                                                 required
-                                            />
+                                            >
+                                                <option value="">Select a category</option>
+                                                {categories.map((category) => (
+                                                    <option key={category.id} value={category.id.toString()}>
+                                                        {category.main_cate_name} - {category.cate_name}
+                                                    </option>
+                                                ))}
+                                            </select>
                                         </div>
 
                                         {/* 제출 및 취소 버튼 */}

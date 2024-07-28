@@ -43,6 +43,8 @@ const InputField: React.FC<InputFieldProps> = ({
 );
 
 const CompanySignUp: React.FC = () => {
+    const [address, setAddress] = useState('');
+    const [postcode, setPostcode] = useState('');
     const [formData, setFormData] = useState({
         username: '',
         name: '',
@@ -87,11 +89,37 @@ const CompanySignUp: React.FC = () => {
             });
             console.log(response.data);
             alert('Company sign up successful!');
-            navigate('/login');
+            navigate('/signin');
         } catch (error) {
             console.error('Company sign up failed', error);
             alert('Sign up failed. Please try again.');
         }
+    };
+
+    const openPostcodeSearch = () => {
+        new (window as any).daum.Postcode({
+            oncomplete: function (data: any) {
+                let fullAddress = data.address;
+                let extraAddress = '';
+
+                if (data.addressType === 'R') {
+                    if (data.bname !== '') {
+                        extraAddress += data.bname;
+                    }
+                    if (data.buildingName !== '') {
+                        extraAddress += (extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName);
+                    }
+                    fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '');
+                }
+
+                setPostcode(data.zonecode);
+                setAddress(fullAddress);
+                setFormData(prev => ({
+                    ...prev,
+                    address: `(${data.zonecode}) ${fullAddress}`
+                }));
+            }
+        }).open();
     };
 
     return (
@@ -146,13 +174,34 @@ const CompanySignUp: React.FC = () => {
                                     value={formData.confirm_password}
                                     onChange={handleChange}
                                 />
-                                <InputField
-                                    icon={<FaAddressCard className="text-gray-400" />}
-                                    name="address"
-                                    placeholder="Enter company address"
-                                    value={formData.address}
-                                    onChange={handleChange}
-                                />
+                                <div className="flex flex-col space-y-2">
+                                    <label htmlFor="address" className="font-medium text-[#161111]">Address</label>
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            id="postcode"
+                                            value={postcode}
+                                            placeholder="Postcode"
+                                            readOnly
+                                            className="w-1/3 h-[56px] pl-3 rounded-[12px] border border-[#e5dbdb] focus:outline-none focus:ring-2 focus:ring-[#f46b5b] transition-all duration-300"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={openPostcodeSearch}
+                                            className="bg-[#f46b5b] h-[56px] px-4 text-white rounded-[12px] transition-all duration-300 hover:bg-[#e35a4a]"
+                                        >
+                                            Search Address
+                                        </button>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        id="address"
+                                        value={address}
+                                        placeholder="Address"
+                                        readOnly
+                                        className="w-full h-[56px] pl-3 rounded-[12px] border border-[#e5dbdb] focus:outline-none focus:ring-2 focus:ring-[#f46b5b] transition-all duration-300"
+                                    />
+                                </div>
                                 <div className="flex pt-[12px] pr-[16px] pb-[12px] pl-[16px] items-start self-stretch shrink-0 flex-nowrap relative z-[39]">
                                     <button
                                         type="submit"
