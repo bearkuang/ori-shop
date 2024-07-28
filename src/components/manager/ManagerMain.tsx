@@ -239,7 +239,7 @@ const ManagerMain: React.FC = () => {
     };
 
     return (
-        <div className='main-container flex w-[1280px] flex-col items-start flex-nowrap bg-[#fff] relative mx-auto my-0'>
+        <div className='main-container flex w-full flex-col items-start flex-nowrap bg-[#fff] relative mx-auto my-0' style={{ height: '1000px' }}>
             <div className='flex h-[898px] flex-col items-start self-stretch shrink-0 flex-nowrap bg-[#fff] relative overflow-hidden'>
                 <div className='flex h-[898px] flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[1]'>
                     <div className='flex pt-[20px] pr-[24px] pb-[20px] pl-[24px] gap-[4px] justify-center items-start self-stretch grow shrink-0 basis-0 flex-nowrap relative z-[2]'>
@@ -302,7 +302,7 @@ const ManagerMain: React.FC = () => {
                             </div>
                         </div>
                         {/* 내용 컴포넌트 */}
-                        <div className='flex flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[25]'>
+                        <div className='flex flex-col items-start grow shrink-0 basis-0 flex-nowrap relative z-[25] h-full overflow-hidden'>
                             {showPendingItemPage ? (
                                 <PendingItemsPage />
                             ) : (

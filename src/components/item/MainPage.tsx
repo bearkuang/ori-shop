@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -55,16 +55,16 @@ const MainPage: React.FC = () => {
         });
         return newIndexes;
       });
-    }, 3000); // 3초마다 이미지 변경
+    }, 3000); // 3 seconds interval
 
     return () => clearInterval(intervalId);
   }, [popularItems, newItems]);
 
-  const getItemImage = (item: Item) => {
+  const getItemImage = useMemo(() => (item: Item) => {
     if (item.images.length === 0) return '';
     const currentIndex = currentImageIndexes[item.id] || 0;
     return item.images[currentIndex]?.file || item.images[0]?.file;
-  };
+  }, [currentImageIndexes]);
 
   const handleShowItems = () => {
     navigate("/category");
@@ -164,8 +164,8 @@ const MainPage: React.FC = () => {
                       className="flex w-[223px] pt-0 pr-0 pb-[12px] pl-0 flex-col gap-[12px] items-start self-stretch shrink-0 flex-nowrap relative z-[87] cursor-pointer"
                     >
                       <div
-                        className="h-[297px] self-stretch shrink-0 bg-cover bg-no-repeat rounded-[12px] relative overflow-hidden z-[88]"
-                        style={{ backgroundImage: `url(${item.images[0]?.file})` }}
+                        className="h-[297px] self-stretch shrink-0 bg-cover bg-no-repeat rounded-[12px] relative overflow-hidden z-[88] transition-all duration-500 ease-in-out"
+                        style={{ backgroundImage: `url(${getItemImage(item)})` }}
                       />
                       <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[89]">
                         <div className="flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[90]">

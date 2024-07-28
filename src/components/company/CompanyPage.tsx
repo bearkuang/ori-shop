@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import AddProduct from './AddProduct';
 import OrderList from './OrderList';
 import AddedProduct from './AddedProduct';
+import axios from 'axios';
+import Chart from 'react-apexcharts';
+import { ApexOptions } from 'apexcharts';
+
+interface SalesData {
+    [date: string]: number;
+}
 
 const CompanyPage: React.FC = () => {
     const navigate = useNavigate();
@@ -11,6 +18,7 @@ const CompanyPage: React.FC = () => {
     const [showAddProduct, setShowAddProduct] = useState(false);
     const [showOrderList, setShowOderList] = useState(false);
     const [showAddedProduct, setShowAddedProduct] = useState(false);
+    const [salesData, setSalesData] = useState<SalesData>({});
 
     const toggleAddedProduct = () => {
         setShowAddedProduct(true);
@@ -39,6 +47,91 @@ const CompanyPage: React.FC = () => {
     const onProductAdded = () => {
         toggleAddedProduct();
     }
+
+    const [chartOptions, setChartOptions] = useState<ApexOptions>({
+        chart: {
+            height: 350,
+            type: 'area',
+            zoom: {
+                enabled: false
+            }
+        },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            curve: 'smooth',
+            width: 2
+        },
+        colors: ['#008FFB'],
+        fill: {
+            type: 'gradient',
+            gradient: {
+                shadeIntensity: 1,
+                opacityFrom: 0.7,
+                opacityTo: 0.9,
+                stops: [0, 90, 100]
+            }
+        },
+        xaxis: {
+            type: 'datetime',
+            categories: []
+        },
+        yaxis: {
+            title: {
+                text: 'Sales'
+            }
+        },
+        tooltip: {
+            x: {
+                format: 'dd MMM yyyy'
+            }
+        },
+    });
+
+    const [chartSeries, setChartSeries] = useState<ApexOptions['series']>([
+        {
+            name: 'Daily Sales',
+            data: []
+        }
+    ]);
+
+    useEffect(() => {
+        fetchSalesData();
+    }, []);
+
+    const fetchSalesData = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get('http://localhost:8000/api/companies/sales_data/', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            setSalesData(response.data);
+
+            // 데이터 변환
+            const sortedDates = Object.keys(response.data).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+            const sales = sortedDates.map(date => response.data[date]);
+
+            // 차트 옵션 업데이트
+            setChartOptions(prevOptions => ({
+                ...prevOptions,
+                xaxis: {
+                    ...prevOptions.xaxis,
+                    categories: sortedDates
+                }
+            }));
+
+            // 차트 시리즈 업데이트
+            setChartSeries([{
+                name: 'Daily Sales',
+                data: sales
+            }]);
+        } catch (error) {
+            console.error('Error fetching sales data', error);
+        }
+    };
 
     return (
         <div className='main-container flex w-[1280px] flex-col items-start flex-nowrap bg-[#fff] relative mx-auto my-0'>
@@ -82,7 +175,7 @@ const CompanyPage: React.FC = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className='flex h-[700px] flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[28]'>
+                        <div className='flex h-[1000px] flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[28]'>
                             {showAddProduct ? (
                                 <div className="w-full pl-4 h-full overflow-y-auto">
                                     <AddProduct onProductAdded={onProductAdded} />
@@ -173,6 +266,22 @@ const CompanyPage: React.FC = () => {
                                                     <div className='w-[24px] h-[24px] bg-cover bg-no-repeat absolute top-0 left-0 z-[83]' />
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div className='flex pt-[24px] pr-[16px] pb-[24px] pl-[16px] gap-[16px] items-start self-stretch shrink-0 flex-wrap relative z-[78]'>
+                                        <div className='flex pt-[24px] pr-[24px] pb-[24px] pl-[24px] flex-col gap-[8px] items-start grow basis-0 flex-nowrap rounded-[12px] border-solid border border-[#e5dddb] relative z-[79]'>
+                                            <div className='flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[80]'>
+                                                <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-medium leading-[24px] text-[#161111] relative text-left whitespace-nowrap z-[81]">
+                                                    Sales
+                                                </span>
+                                            </div>
+                                            <Chart
+                                                options={chartOptions}
+                                                series={chartSeries}
+                                                type="area"
+                                                height={350}
+                                                width="800px"
+                                            />
                                         </div>
                                     </div>
                                 </>
