@@ -23,7 +23,7 @@ const Header: React.FC = () => {
     }
 
     return (
-        <div className="flex flex-col items-start self-stretch shrink-0 border-solid border-b border-b-[#e8d1ce] flex-nowrap relative z-10">
+        <div className="flex flex-col items-start self-stretch shrink-0 border-solid border-b border-b-[#e8d1ce] flex-nowrap relative z-[10]">
             <div className='flex py-3 px-10 justify-between items-center self-stretch shrink-0 flex-nowrap border-solid border-t border-t-gray-300 relative'>
                 <div className='flex gap-4 items-center shrink-0 flex-nowrap relative'>
                     <div className='flex w-10 flex-col items-start shrink-0 flex-nowrap relative'>

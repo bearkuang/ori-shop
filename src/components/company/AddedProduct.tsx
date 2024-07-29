@@ -14,6 +14,7 @@ interface Product {
     item_price: number;
     item_soldout: string;
     item_is_display: string;
+    sales_count: number;
     options: Option[];
     image_url?: string;
 }
@@ -63,6 +64,7 @@ const AddedProduct: React.FC = () => {
                             등록 상태: {product.item_is_display === 'N' ? '등록 대기 중' : '판매 중'}
                         </p>
                         <p className="text-gray-700 mb-2">총 재고: {getTotalStock(product.options)}</p>
+                        <p className="text-gray-700 mb-2">총 판매량: {product.sales_count}</p>
                         <div className="mt-4">
                             <h4 className="font-semibold mb-2 text-[#1c0f0c]">옵션:</h4>
                             <ul className="list-disc list-inside">

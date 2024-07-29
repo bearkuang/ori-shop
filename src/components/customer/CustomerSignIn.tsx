@@ -10,11 +10,15 @@ const CustomerSignIn: React.FC = () => {
         password: '',
     });
     const [error, setError] = useState('');
-    const [isCustomer, setIsCustomer] = useState(true);
     const navigate = useNavigate();
     const { login } = useAuth();
     const [showModal, setShowModal] = useState(false);
     const [companyCode, setCompanyCode] = useState('');
+    const [loginType, setLoginType] = useState<'customer' | 'company'>('customer');
+
+    const handleLoginTypeChange = (type: 'customer' | 'company') => {
+        setLoginType(type);
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -26,19 +30,14 @@ const CustomerSignIn: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const endpoint = isCustomer
+            const endpoint = loginType === 'customer'
                 ? 'http://localhost:8000/api/auth/login/'
                 : 'http://localhost:8000/api/auth/company-login/';
 
             const response = await axios.post(endpoint, formData);
             console.log('Login successful', response.data);
 
-            // 로그인 상태 업데이트
-            // userType을 isCustomer 상태에 따라 결정
-            const userType = isCustomer ? 'customer' : 'company';
-            login(response.data.access, userType);
-
-            // 로그인 성공 후 메인 페이지로 리다이렉트
+            login(response.data.access, loginType);
             navigate('/');
         } catch (error) {
             if (axios.isAxiosError(error) && error.response) {
@@ -81,14 +80,14 @@ const CustomerSignIn: React.FC = () => {
                             <form onSubmit={handleSubmit} className='flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[27] w-full max-w-md mx-auto'>
                                 <div className='flex w-full justify-center mb-6'>
                                     <button
-                                        onClick={() => setIsCustomer(true)}
-                                        className={`px-6 py-2 mr-2 rounded-full transition-all duration-300 ${isCustomer ? 'bg-[#f46047] text-white shadow-md' : 'bg-gray-200 text-gray-700'}`}
+                                        onClick={() => handleLoginTypeChange('customer')}
+                                        className={`px-6 py-2 mr-2 rounded-full transition-all duration-300 ${loginType === 'customer' ? 'bg-[#f46047] text-white shadow-md' : 'bg-gray-200 text-gray-700'}`}
                                     >
                                         고객 로그인
                                     </button>
                                     <button
-                                        onClick={() => setIsCustomer(false)}
-                                        className={`px-6 py-2 rounded-full transition-all duration-300 ${!isCustomer ? 'bg-[#f46047] text-white shadow-md' : 'bg-gray-200 text-gray-700'}`}
+                                        onClick={() => handleLoginTypeChange('company')}
+                                        className={`px-6 py-2 rounded-full transition-all duration-300 ${loginType === 'company' ? 'bg-[#f46047] text-white shadow-md' : 'bg-gray-200 text-gray-700'}`}
                                     >
                                         기업 로그인
                                     </button>
@@ -156,7 +155,7 @@ const CustomerSignIn: React.FC = () => {
                                     </div>
                                     {/* 모달 컴포넌트 */}
                                     {showModal && (
-                                        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center">
+                                        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center z-[9999]">
                                             <div className="bg-white p-5 rounded-lg shadow-lg w-96">
                                                 <div className="flex justify-between items-center mb-4">
                                                     <h3 className="text-xl font-bold">기업 코드 입력</h3>
