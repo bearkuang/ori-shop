@@ -14,6 +14,7 @@ import ProtectedAdminRoute from './context/ProtectedAdminRoute';
 import ManagerMain from './components/manager/ManagerMain';
 import ManaerSignIn from './components/manager/ManagerSingIn';
 import CompanySignUp from './components/company/CompanySignUp';
+import SearchedItemPage from './components/item/SearchedItemPage';
 
 const App: React.FC = () => {
   return (
@@ -30,6 +31,7 @@ const App: React.FC = () => {
             <Route path="/item/:itemId/info" element={<ItemDetailPage />} />
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/companypage" element={<CompanyPage />} />
+            <Route path="/search" element={<SearchedItemPage />} />
             <Route path="/manager/login" element={<ManaerSignIn />} />
             <Route path="/manager/*" element={
               <ProtectedAdminRoute>

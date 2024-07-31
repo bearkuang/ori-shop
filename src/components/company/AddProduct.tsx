@@ -34,6 +34,7 @@ const AddProduct: React.FC<AddProductProps> = ({ onProductAdded }) => {
     const navigate = useNavigate();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [categories, setCategories] = useState<Category[]>([]);
+    const sizeOptions = ['free', 'one-size', 'S', 'M', 'L', 'XL'];
 
     const handlePrevImage = () => {
         setCurrentImageIndex((prevIndex) =>
@@ -131,6 +132,13 @@ const AddProduct: React.FC<AddProductProps> = ({ onProductAdded }) => {
 
         fetchCategories();
     }, []);
+
+    const removeOption = (index: number) => {
+        setFormData(prevData => ({
+            ...prevData,
+            options: prevData.options.filter((_, i) => i !== index)
+        }));
+    };
 
     return (
         <div className='main-container flex w-full h-full flex-col items-start flex-nowrap bg-[#fff] relative mx-auto my-0 overflow-y-auto'>
@@ -245,13 +253,16 @@ const AddProduct: React.FC<AddProductProps> = ({ onProductAdded }) => {
                                                         onChange={(e) => handleOptionChange(index, 'opt_color', e.target.value)}
                                                         className="flex-1 p-2 border border-gray-300 rounded-lg"
                                                     />
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Size"
+                                                    <select
                                                         value={option.opt_size}
                                                         onChange={(e) => handleOptionChange(index, 'opt_size', e.target.value)}
                                                         className="flex-1 p-2 border border-gray-300 rounded-lg"
-                                                    />
+                                                    >
+                                                        <option value="">Select Size</option>
+                                                        {sizeOptions.map((size) => (
+                                                            <option key={size} value={size}>{size}</option>
+                                                        ))}
+                                                    </select>
                                                     <input
                                                         type="number"
                                                         placeholder="Stock"
@@ -259,6 +270,13 @@ const AddProduct: React.FC<AddProductProps> = ({ onProductAdded }) => {
                                                         onChange={(e) => handleOptionChange(index, 'opt_stock', parseInt(e.target.value))}
                                                         className="flex-1 p-2 border border-gray-300 rounded-lg"
                                                     />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeOption(index)}
+                                                        className="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                                                    >
+                                                        Remove
+                                                    </button>
                                                 </div>
                                             ))}
                                             <button type="button" onClick={addOption} className="mt-2 p-2 bg-gray-200 rounded-lg text-gray-700 hover:bg-gray-300 transition">

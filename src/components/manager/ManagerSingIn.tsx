@@ -42,7 +42,7 @@ const ManagerSignIn: React.FC = () => {
                 <div className='flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[1]'>
                     <div className='w-full flex justify-center mb-8 mt-8'>
                         <img
-                            src="https://i.ibb.co/2ZVYy4z/dori-login-design.webp"
+                            src="/images/dori-login-design.png"
                             alt="D'ori Login"
                             className="w-[960px] h-auto rounded-[12px]"
                         />

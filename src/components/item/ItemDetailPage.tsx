@@ -60,6 +60,7 @@ const colorMap: { [key: string]: string } = {
     'Denim': '#1560BD',
     'White': '#FFFFFF',
     'Yellow': '#F4FA58',
+    'Ivory': '#FFFFF0',
 };
 
 const colorImageMap: { [key: string]: string } = {
