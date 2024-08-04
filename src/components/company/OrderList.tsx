@@ -111,7 +111,13 @@ const OrderList: React.FC = () => {
             const updatedOrders = orders.map(order => ({
                 ...order,
                 order_products: order.order_products.map(product =>
-                    product.id === productId ? { ...product, delivery_status: newStatus } : product
+                    product.id === productId
+                        ? {
+                            ...product,
+                            delivery_status: newStatus,
+                            review_enabled: newStatus === '배송완료' ? 'Y' : product.review_enabled
+                        }
+                        : product
                 )
             }));
             setOrders(updatedOrders);
@@ -163,62 +169,64 @@ const OrderList: React.FC = () => {
                                     OrderList
                                 </span>
                             </div>
-                            {orders.map((order) => (
-                                <div key={order.id} className='flex flex-col'>
-                                    <span className="font-['Epilogue'] text-[18px] font-bold text-[#1c0f0c] mb-2 ml-3 mt-2">
-                                        주문 날짜: {new Date(order.order_create_date).toLocaleDateString()}
-                                    </span>
-                                    {order.order_products.map((product) => (
-                                        <div
-                                            key={product.id}
-                                            className='flex pt-[12px] pr-[16px] pb-[12px] pl-[16px] justify-between items-start self-stretch shrink-0 flex-nowrap bg-[#fff] relative z-[6] border-b border-gray-300'
-                                        >
-                                            <Link
-                                                to={`/item/${product.item.id}/info`}
-                                                className='flex w-[316px] gap-[16px] items-start shrink-0 flex-nowrap relative z-[7]'
+                            <div className='overflow-y-auto max-h-[400px] w-full'> {/* 스크롤 가능한 컨테이너 */}
+                                {orders.map((order) => (
+                                    <div key={order.id} className='flex flex-col'>
+                                        <span className="font-['Epilogue'] text-[18px] font-bold text-[#1c0f0c] mb-2 ml-3 mt-2">
+                                            주문 날짜: {new Date(order.order_create_date).toLocaleDateString()}
+                                        </span>
+                                        {order.order_products.map((product) => (
+                                            <div
+                                                key={product.id}
+                                                className='flex pt-[12px] pr-[16px] pb-[12px] pl-[16px] justify-between items-start self-stretch shrink-0 flex-nowrap bg-[#fff] relative z-[6] border-b border-gray-300'
                                             >
-                                                {/* 주문 한 상품 이미지 */}
-                                                <div className='w-[70px] h-[93px] shrink-0 bg-cover bg-no-repeat rounded-[8px] relative overflow-hidden z-[8]' style={{ backgroundImage: `url(http://localhost:8000${product.item.images[0]?.file})` }} />
-                                                <div className='flex flex-col justify-center items-start grow shrink-0 basis-0 flex-nowrap relative z-[9]'>
-                                                    {/* 주문 한 상품 이름 */}
-                                                    <div className='flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-10'>
-                                                        <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-medium leading-[24px] text-[#1c0f0c] relative text-left whitespace-nowrap z-[11]">
-                                                            {product.item.item_name}
+                                                <Link
+                                                    to={`/item/${product.item.id}/info`}
+                                                    className='flex w-[316px] gap-[16px] items-start shrink-0 flex-nowrap relative z-[7]'
+                                                >
+                                                    {/* 주문 한 상품 이미지 */}
+                                                    <div className='w-[70px] h-[93px] shrink-0 bg-cover bg-no-repeat rounded-[8px] relative overflow-hidden z-[8]' style={{ backgroundImage: `url(http://localhost:8000${product.item.images[0]?.file})` }} />
+                                                    <div className='flex flex-col justify-center items-start grow shrink-0 basis-0 flex-nowrap relative z-[9]'>
+                                                        {/* 주문 한 상품 이름 */}
+                                                        <div className='flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-10'>
+                                                            <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-medium leading-[24px] text-[#1c0f0c] relative text-left whitespace-nowrap z-[11]">
+                                                                {product.item.item_name}
+                                                            </span>
+                                                        </div>
+                                                        {/* 주문 한 날짜 */}
+                                                        <div className='flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[12]'>
+                                                            <span className="h-[21px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[14px] font-normal leading-[21px] text-[#9b5149] relative text-left whitespace-nowrap z-[13]">
+                                                                {new Date(order.order_create_date).toLocaleDateString()}
+                                                            </span>
+                                                        </div>
+                                                        {/* 상품 가격 */}
+                                                        <div className='flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[14]'>
+                                                            <span className="h-[21px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[14px] font-normal leading-[21px] text-[#9b5149] relative text-left whitespace-nowrap z-[15]">
+                                                                ${Number(product.item.item_price).toFixed(2)}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </Link>
+                                                <div className='flex flex-col items-end justify-between h-[93px] relative z-[16]'>
+                                                    {/* 주문 한 총 가격 */}
+                                                    <div className='flex flex-col items-end shrink-0 relative z-[17]'>
+                                                        <span className="h-[24px] shrink-0 font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#1c0f0c] text-right whitespace-nowrap z-[18]">
+                                                            ${Number(order.order_total_price).toFixed(2)}
                                                         </span>
                                                     </div>
-                                                    {/* 주문 한 날짜 */}
-                                                    <div className='flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[12]'>
-                                                        <span className="h-[21px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[14px] font-normal leading-[21px] text-[#9b5149] relative text-left whitespace-nowrap z-[13]">
-                                                            {new Date(order.order_create_date).toLocaleDateString()}
+                                                    {/* 배송 상태 및 배송 상태 업데이트 */}
+                                                    <div className='flex flex-col items-end'>
+                                                        <span className="text-sm text-gray-600 mb-2">
+                                                            배송 상태: {product.delivery_status}
                                                         </span>
+                                                        {renderDeliveryButtons(product)}
                                                     </div>
-                                                    {/* 상품 가격 */}
-                                                    <div className='flex flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[14]'>
-                                                        <span className="h-[21px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[14px] font-normal leading-[21px] text-[#9b5149] relative text-left whitespace-nowrap z-[15]">
-                                                            ${Number(product.item.item_price).toFixed(2)}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                            <div className='flex flex-col items-end justify-between h-[93px] relative z-[16]'>
-                                                {/* 주문 한 총 가격 */}
-                                                <div className='flex flex-col items-end shrink-0 relative z-[17]'>
-                                                    <span className="h-[24px] shrink-0 font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#1c0f0c] text-right whitespace-nowrap z-[18]">
-                                                        ${Number(order.order_total_price).toFixed(2)}
-                                                    </span>
-                                                </div>
-                                                {/* 배송 상태 및 배송 상태 업데이트 */}
-                                                <div className='flex flex-col items-end'>
-                                                    <span className="text-sm text-gray-600 mb-2">
-                                                        배송 상태: {product.delivery_status}
-                                                    </span>
-                                                    {renderDeliveryButtons(product)}
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            ))}
+                                        ))}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>

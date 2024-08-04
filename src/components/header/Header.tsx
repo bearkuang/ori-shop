@@ -24,6 +24,10 @@ const Header: React.FC = () => {
         }
     }
 
+    const handleGoToCart = () => {
+        navigate("/cart");
+    }
+
     const toggleSearchModal = () => {
         setIsSearchModalOpen(!isSearchModalOpen);
     }
@@ -48,7 +52,7 @@ const Header: React.FC = () => {
                         </button>
                     </div>
                     <div className='flex gap-3 items-start shrink-0 flex-nowrap relative'>
-                        <div className='flex flex-col items-center grow shrink-0 flex-nowrap relative'>
+                        <div className='flex flex-col items-center grow shrink-0 flex-nowrap relative cursor-pointer' onClick={handleGoToCart}>
                             <img src="/images/smart-cart.png" alt="Cart" className="w-10 h-10 rounded-full" />
                         </div>
                         {isAuthenticated ? (

@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import OrderHistory from './OrderHistory';
 import LikedProducts from './LikedProducts';
 import ProductReviews from './ProductReviews';
+import ShoppingCart from './ShoppingCart';
 
 const MyPage: React.FC = () => {
     const navigate = useNavigate();
@@ -11,21 +12,32 @@ const MyPage: React.FC = () => {
     const [showOrderHistory, setShowOrderHistory] = useState(false);
     const [showLikedProducts, setShowLikedProducts] = useState(false);
     const [showProductReviews, setShowProductReviews] = useState(false);
+    const [showShoppingCart, setShowShoppingCart] = useState(false);
 
     const toggleOrderHistory = () => {
         setShowOrderHistory(true);
         setShowLikedProducts(false);
         setShowProductReviews(false);
+        setShowShoppingCart(false);
     }
 
     const toggleLikedProducts = () => {
         setShowLikedProducts(true);
         setShowOrderHistory(false);
         setShowProductReviews(false);
+        setShowShoppingCart(false);
     }
 
     const toggleProductReviews = () => {
         setShowProductReviews(true);
+        setShowOrderHistory(false);
+        setShowLikedProducts(false);
+        setShowShoppingCart(false);
+    }
+
+    const toggleShoppingCart = () => {
+        setShowShoppingCart(true);
+        setShowProductReviews(false);
         setShowOrderHistory(false);
         setShowLikedProducts(false);
     }
@@ -34,6 +46,7 @@ const MyPage: React.FC = () => {
         setShowOrderHistory(false);
         setShowLikedProducts(false);
         setShowProductReviews(false);
+        setShowShoppingCart(false);
     }
 
     return (
@@ -85,6 +98,8 @@ const MyPage: React.FC = () => {
                                 <LikedProducts />
                             ) : showProductReviews ? (
                                 <ProductReviews />
+                            ) : showShoppingCart ? (
+                                <ShoppingCart />
                             ) : (
                                 <>
                                     <div className='flex pt-[20px] pr-[16px] pb-[12px] pl-[16px] flex-col items-start self-stretch shrink-0 flex-nowrap relative z-[29]'>
@@ -145,7 +160,7 @@ const MyPage: React.FC = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='flex h-[56px] pt-0 pr-[16px] pb-0 pl-[16px] justify-between items-center self-stretch shrink-0 flex-nowrap bg-[#fff] relative z-[61]'>
+                                    <div className='flex h-[56px] pt-0 pr-[16px] pb-0 pl-[16px] justify-between items-center self-stretch shrink-0 flex-nowrap bg-[#fff] relative z-[61] cursor-pointer' onClick={toggleShoppingCart}>
                                         <div className='flex flex-col items-start grow shrink-0 basis-0 flex-nowrap relative overflow-hidden z-[62]'>
                                             <span className="h-[24px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[16px] font-normal leading-[24px] text-[#1c0f0c] relative text-left overflow-hidden whitespace-nowrap z-[63]">
                                                 Shopping Cart

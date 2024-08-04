@@ -15,6 +15,7 @@ import ManagerMain from './components/manager/ManagerMain';
 import ManaerSignIn from './components/manager/ManagerSingIn';
 import CompanySignUp from './components/company/CompanySignUp';
 import SearchedItemPage from './components/item/SearchedItemPage';
+import ShoppingCart from './components/customer/ShoppingCart';
 
 const App: React.FC = () => {
   return (
@@ -30,6 +31,7 @@ const App: React.FC = () => {
             <Route path="/company-signup" element={<CompanySignUp />} />
             <Route path="/item/:itemId/info" element={<ItemDetailPage />} />
             <Route path="/mypage" element={<MyPage />} />
+            <Route path="/cart" element={<ShoppingCart />} />
             <Route path="/companypage" element={<CompanyPage />} />
             <Route path="/search" element={<SearchedItemPage />} />
             <Route path="/manager/login" element={<ManaerSignIn />} />

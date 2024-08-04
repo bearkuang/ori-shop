@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FaStar, FaThumbsUp, FaThumbsDown, FaComment } from 'react-icons/fa';
 import ReviewStats from './ReviewStats';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 interface Item {
     id: number;
@@ -156,18 +156,45 @@ const ItemDetailPage: React.FC = () => {
     const handleAddToCart = async () => {
         if (selectedColor && selectedSize && item) {
             try {
-                await axios.post('http://localhost:8000/api/items/add_to_cart/', {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    alert('로그인이 필요합니다.');
+                    // 로그인 페이지로 리다이렉트 또는 로그인 모달 표시
+                    return;
+                }
+    
+                const response = await axios.post('http://localhost:8000/api/items/add_to_cart/', 
+                {
                     quantity,
                     option: {
                         item_no: item.id,
                         opt_color: selectedColor,
                         opt_size: selectedSize
                     }
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
                 });
-                alert('장바구니에 담겼습니다.');
+    
+                if (response.status === 201) {
+                    alert('장바구니에 담겼습니다.');
+                } else {
+                    alert('장바구니에 담는 중 오류가 발생했습니다.');
+                }
             } catch (error) {
                 console.error('Error adding to cart:', error);
-                alert('장바구니에 담는 중 오류가 발생했습니다.');
+                if (axios.isAxiosError(error)) {
+                    if (error.response && error.response.status === 401) {
+                        alert('인증에 실패했습니다. 다시 로그인해주세요.');
+                        // 로그인 페이지로 리다이렉트
+                    } else {
+                        alert('장바구니에 담는 중 오류가 발생했습니다.');
+                    }
+                } else {
+                    alert('알 수 없는 오류가 발생했습니다.');
+                }
             }
         } else {
             alert('색상과 사이즈를 선택해주세요.');
@@ -177,16 +204,43 @@ const ItemDetailPage: React.FC = () => {
     const handleOrderDirect = async () => {
         if (selectedColor && selectedSize && item) {
             try {
-                await axios.post('http://localhost:8000/api/orders/order_direct/', {
-                    item_id: item.id,
-                    option_id: selectedOption?.id,
-                    quantity,
-                    order_total_price: item.item_price * quantity
-                });
-                alert('구매가 완료되었습니다.');
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    alert('로그인이 필요합니다.');
+                    // 로그인 페이지로 리다이렉트 또는 로그인 모달 표시
+                    return;
+                }
+
+                const response = await axios.post('http://localhost:8000/api/orders/order_direct/',
+                    {
+                        item_id: item.id,
+                        option_id: selectedOption?.id,
+                        quantity,
+                        order_total_price: item.item_price * quantity
+                    },
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+
+                if (response.status === 201) {
+                    alert('구매가 완료되었습니다.');
+                } else {
+                    alert('구매 처리 중 오류가 발생했습니다.');
+                }
             } catch (error) {
                 console.error('Error placing order:', error);
-                alert('구매 중 오류가 발생했습니다.');
+                if (axios.isAxiosError(error)) {
+                    if (error.response && error.response.status === 401) {
+                        alert('인증에 실패했습니다. 다시 로그인해주세요.');
+                        // 로그인 페이지로 리다이렉트
+                    } else {
+                        alert('구매 중 오류가 발생했습니다.');
+                    }
+                } else {
+                    alert('알 수 없는 오류가 발생했습니다.');
+                }
             }
         } else {
             alert('색상과 사이즈를 선택해주세요.');
@@ -274,10 +328,10 @@ const ItemDetailPage: React.FC = () => {
                                                 {/* 상품 색상 정보 */}
                                                 <div className='flex pt-[16px] pr-[16px] pb-[16px] pl-[16px] gap-[20px] items-start self-stretch shrink-0 flex-wrap relative z-[73]'>
                                                     {Array.from(new Set(item.options.map((option) => option.opt_color))).map((color, index) => (
-                                                        <div key={index} className='flex w-[40px] h-[40px] flex-col items-start flex-nowrap rounded-[20px] border-solid border border-[#e8d1ce] relative z-[74]' style={{ 
+                                                        <div key={index} className='flex w-[40px] h-[40px] flex-col items-start flex-nowrap rounded-[20px] border-solid border border-[#e8d1ce] relative z-[74]' style={{
                                                             backgroundColor: colorMap[color] || color,
                                                             backgroundImage: colorImageMap[color] ? `url(${colorImageMap[color]})` : 'none'
-                                                        }}  />
+                                                        }} />
                                                     ))}
                                                 </div>
                                             </div>
@@ -479,8 +533,8 @@ const ItemDetailPage: React.FC = () => {
                             className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
                         >
                             <option value="">Select Color</option>
-                            {item.options.map(option => (
-                                <option key={option.id} value={option.opt_color}>{option.opt_color}</option>
+                            {Array.from(new Set(item.options.map(option => option.opt_color))).map(color => (
+                                <option key={color} value={color}>{color}</option>
                             ))}
                         </select>
                         <select
@@ -489,8 +543,8 @@ const ItemDetailPage: React.FC = () => {
                             className="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
                         >
                             <option value="">Select Size</option>
-                            {item.options.map(option => (
-                                <option key={option.id} value={option.opt_size}>{option.opt_size}</option>
+                            {Array.from(new Set(item.options.map(option => option.opt_size))).map(size => (
+                                <option key={size} value={size}>{size}</option>
                             ))}
                         </select>
                         {selectedOption && (

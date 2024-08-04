@@ -58,7 +58,7 @@ const AddedProduct: React.FC = () => {
                         <h3 className="text-xl font-semibold mb-2 text-[#1c0f0c]">{product.item_name}</h3>
                         <p className="text-gray-700 mb-2">가격: {product.item_price.toLocaleString()}원</p>
                         <p className={`mb-2 ${product.item_soldout === 'N' ? 'text-green-600' : 'text-red-600'}`}>
-                            재고 상태: {product.item_soldout === 'N' ? '판매 중' : '품절'}
+                            재고 상태: {product.item_soldout === 'N' ? '재고 있음' : '품절'}
                         </p>
                         <p className={`mb-2 ${product.item_is_display === 'N' ? 'text-red-600' : 'text-green-600'}`}>
                             등록 상태: {product.item_is_display === 'N' ? '등록 대기 중' : '판매 중'}

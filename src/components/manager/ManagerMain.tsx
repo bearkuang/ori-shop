@@ -49,7 +49,7 @@ const Dashboard: React.FC<{
                                             기업명: {company.username}
                                         </span>
                                     </div>
-                                    <div className='flex justify-between w-[200px] flex-col items-start shrink-0 flex-nowrap relative overflow-hidden z-[35]'>
+                                    <div className='flex justify-between w-[250px] flex-col items-start shrink-0 flex-nowrap relative overflow-hidden z-[35]'>
                                         <span className="h-[21px] self-stretch shrink-0 basis-auto font-['Epilogue'] text-[14px] font-normal leading-[21px] text-[#896660] relative text-left whitespace-nowrap z-[36]">
                                             사업자명: {company.name}
                                         </span>
